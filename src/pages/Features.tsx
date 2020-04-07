@@ -9,9 +9,16 @@ import Look from "../components/svg/Look";
 import Dates from "../components/svg/Dates";
 
 const Left = () => (
-  <Grid container direction="column" alignItems="center">
+  <Grid
+    container
+    direction="column"
+    alignItems="center"
+    // style={{ height: "30rem" }}
+    justify="flex-start"
+    spacing={5}
+  >
     <Grid item>
-      <Typography>Make the look your own</Typography>
+      <Typography variant="h6">Make the look your own</Typography>
     </Grid>
     <Grid item>
       <Look />
@@ -20,9 +27,16 @@ const Left = () => (
 );
 
 const Right = () => (
-  <Grid container direction="column" alignItems="center">
+  <Grid
+    container
+    direction="column"
+    alignItems="center"
+    // style={{ height: "30rem" }}
+    justify="flex-start"
+    spacing={5}
+  >
     <Grid item>
-      <Typography>Pick your dates</Typography>
+      <Typography variant="h6">Pick your dates</Typography>
     </Grid>
     <Grid item>
       <Dates />
@@ -45,9 +59,9 @@ const AVATARS = [
 
 const AvatarJJ = (props) => {
   return (
-    <Grid container direction="column" alignItems="center">
+    <Grid container direction="column" alignItems="center" spacing={2}>
       <Grid item>
-        <Typography>{props.name}</Typography>
+        <Typography style={{ color: COLOURS.white }}>{props.name}</Typography>
       </Grid>
       <Grid item>
         <Avatar
@@ -65,27 +79,38 @@ const AvatarJJ = (props) => {
 };
 
 const Middle = () => (
-  <Grid container direction="column" alignItems="center">
+  <Grid
+    container
+    direction="column"
+    alignItems="center"
+    // style={{ height: "30rem" }}
+    justify="flex-start"
+    spacing={5}
+  >
     <Grid item>
-      <Typography>Choose your avatars</Typography>
+      <Typography variant="h6">Choose your avatars</Typography>
     </Grid>
-    {AVATARS.map((avatar) => (
-      <Grid item>
-        <AvatarJJ {...avatar} />
+    <Grid item>
+      <Grid container direction="row" spacing={2}>
+        {AVATARS.map((avatar) => (
+          <Grid item>
+            <AvatarJJ {...avatar} />
+          </Grid>
+        ))}
       </Grid>
-    ))}
+    </Grid>
   </Grid>
 );
 
 const Features: React.FC = () => {
   return (
-    <Page background={COLOURS.red} spacing={3}>
+    <Page background={COLOURS.red}>
       <Grid item>
         <Grid
           container
           direction="row"
           spacing={10}
-          alignItems="center"
+          alignItems="flex-start"
           justify="center"
         >
           <Grid item>

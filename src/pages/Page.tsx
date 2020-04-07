@@ -10,7 +10,11 @@ interface PageProps {
 const Page: React.FC<PageProps> = (props) => (
   <Grid
     container
-    style={{ minHeight: "40rem", background: props.background || "white" }}
+    style={{
+      minHeight: "45rem",
+      background: props.background || "white",
+      width: "100%",
+    }}
     direction="column"
     justify="space-around"
     alignItems="center"

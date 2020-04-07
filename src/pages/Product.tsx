@@ -27,7 +27,7 @@ const Words = () => {
 
 const Product: React.FC = () => {
   return (
-    <Page background={COLOURS.white} spacing={3}>
+    <Page background={COLOURS.white}>
       <Grid item>
         <Grid
           container

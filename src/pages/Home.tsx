@@ -30,7 +30,7 @@ const Words = () => {
 
 const Home: React.FC = () => {
   return (
-    <Page background={COLOURS.yellow} spacing={3}>
+    <Page background={COLOURS.yellow}>
       <Grid item>
         <Grid
           container
