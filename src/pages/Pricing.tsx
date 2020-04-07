@@ -6,11 +6,11 @@ import Page from "./Page";
 import Card from "../components/Card";
 
 import { CATEGORIES } from "../shared/PricingCategories";
-// import { COLOURS } from "../shared/Colours";
+import { COLOURS } from "../shared/Colours";
 
 const Pricing: React.FC = () => {
   return (
-    <Page spacing={3}>
+    <Page background={COLOURS.green} spacing={3}>
       <Grid item>
         <Typography variant="h3">
           <span role="img" aria-label="emoji">

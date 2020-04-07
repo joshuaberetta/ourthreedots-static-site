@@ -3,6 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 import Page from "./Page";
+import WannaRing from "../components/WannaRing";
 import WhatDo from "../components/WhatDo";
 import { COLOURS } from "../shared/Colours";
 
@@ -11,23 +12,25 @@ const Words = () => {
     <Grid container direction="column" spacing={2} style={{ width: 300 }}>
       <Grid item>
         <Typography variant="h4">
-          Your{" "}
+          Digital memories, brought to life{" "}
           <span role="img" aria-label="emoji">
-            💩
-          </span>{" "}
-          is our business.{" "}
-          <span role="img" aria-label="emoji">
-            😏
+            🔥
           </span>
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Typography variant="body1">
+          Remember and relive shared memories, just as you would with a photo
+          album.
         </Typography>
       </Grid>
     </Grid>
   );
 };
 
-const Product: React.FC = () => {
+const Home: React.FC = () => {
   return (
-    <Page background={COLOURS.white} spacing={3}>
+    <Page background={COLOURS.yellow} spacing={3}>
       <Grid item>
         <Grid
           container
@@ -37,10 +40,10 @@ const Product: React.FC = () => {
           justify="center"
         >
           <Grid item>
-            <WhatDo />
+            <Words />
           </Grid>
           <Grid item>
-            <Words />
+            <WannaRing />
           </Grid>
         </Grid>
       </Grid>
@@ -48,4 +51,4 @@ const Product: React.FC = () => {
   );
 };
 
-export default Product;
+export default Home;
