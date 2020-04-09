@@ -14,7 +14,7 @@ import {
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 
-const INSIGHTFUL = CATEGORIES.filter((cat) => (cat.title = "insightful"))[0];
+const CAT = CATEGORIES.filter((cat) => cat.title === "insightful")[0];
 
 const Header: React.FC = () => {
   return (
@@ -26,12 +26,12 @@ const Header: React.FC = () => {
       alignItems="center"
     >
       <Grid item>
-        <Typography variant="h3" style={{ color: COLOURS.blue }}>
-          {INSIGHTFUL.title}
+        <Typography variant="h3" style={{ color: CAT.color }}>
+          {CAT.title}
         </Typography>
       </Grid>
       <Grid item>
-        <Typography variant="h5">{INSIGHTFUL.description}</Typography>
+        <Typography variant="h5">{CAT.description}</Typography>
       </Grid>
     </Grid>
   );
@@ -67,12 +67,12 @@ const DragDrop: React.FC = () => {
           height: 300,
           width: 300,
           background: "none",
-          border: `dashed 2px ${COLOURS.blue}`,
+          border: `dashed 2px ${CAT.color}`,
           borderRadius: 10,
         }}
       >
         <Grid item>
-          <Typography variant="h6" style={{ color: COLOURS.blue }}>
+          <Typography variant="h6" style={{ color: CAT.color }}>
             Drop it in!
           </Typography>
         </Grid>
@@ -141,7 +141,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
         <TextField
           label={props.label}
           variant="outlined"
-          style={{ width: 300, borderColor: COLOURS.blue }}
+          style={{ width: 300, borderColor: CAT.color }}
         />
       </Grid>
     </Grid>
@@ -198,6 +198,22 @@ const DatePickers: React.FC = () => {
   );
 };
 
+const Purchase: React.FC = () => {
+  return (
+    <Button
+      variant="outlined"
+      style={{ border: `2px solid ${CAT.color}`, width: 300 }}
+      disableRipple
+    >
+      <Typography variant="h3">
+        <span role="img" aria-label="emoji">
+          👉 👉 👉
+        </span>
+      </Typography>
+    </Button>
+  );
+};
+
 const Insightful: React.FC = () => {
   return (
     <Grid
@@ -218,17 +234,7 @@ const Insightful: React.FC = () => {
         <DatePickers />
       </Grid>
       <Grid item>
-        <Button
-          variant="outlined"
-          style={{ border: `2px solid ${COLOURS.blue}`, width: 300 }}
-          disableRipple
-        >
-          <Typography variant="h3">
-            <span role="img" aria-label="emoji">
-              👉 👉 👉
-            </span>
-          </Typography>
-        </Button>
+        <Purchase />
       </Grid>
     </Grid>
   );
