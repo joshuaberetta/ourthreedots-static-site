@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -6,6 +6,7 @@ import {
   Switch,
 } from "react-router-dom";
 
+import { FormContext } from "./shared/context/form-context";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
@@ -21,8 +22,25 @@ import Book from "./pages/Book";
 import { HREFS } from "./shared/Hrefs";
 
 const App: React.FC = () => {
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [id, setId] = useState(null);
+
+  const updateForm = useCallback((name, email, id) => {
+    setName(name);
+    setEmail(email);
+    setId(id);
+  }, []);
+
   return (
-    <React.Fragment>
+    <FormContext.Provider
+      value={{
+        name: name,
+        email: email,
+        id: id,
+        updateForm: updateForm,
+      }}
+    >
       <Router>
         <NavBar />
         <Switch>
@@ -46,7 +64,7 @@ const App: React.FC = () => {
           <Redirect to={HREFS.home} />
         </Switch>
       </Router>
-    </React.Fragment>
+    </FormContext.Provider>
   );
 };
 

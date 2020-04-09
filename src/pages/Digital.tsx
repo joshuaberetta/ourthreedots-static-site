@@ -60,7 +60,11 @@ const Header: React.FC = () => {
   );
 };
 
-const Content: React.FC = () => {
+interface ContentProps {
+  emailChange?: () => void;
+}
+
+const Content: React.FC<ContentProps> = (props) => {
   return (
     <Grid
       container
@@ -74,6 +78,7 @@ const Content: React.FC = () => {
       </Grid>
       <Grid item>
         <Form />
+        {/* <Form emailChange={props.emailChange} /> */}
       </Grid>
     </Grid>
   );
@@ -104,7 +109,11 @@ const DragDrop: React.FC = () => {
   );
 };
 
-const Form: React.FC = () => {
+interface FormProps {
+  emailChange?: () => void;
+}
+
+const Form: React.FC<FormProps> = (props) => {
   return (
     <Grid
       container
@@ -165,6 +174,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
           label={props.label}
           variant="outlined"
           style={{ width: 300, borderColor: CAT.color }}
+          // onChange={props.emailChange.bind()}
         />
       </Grid>
     </Grid>
@@ -321,9 +331,20 @@ const Digital: React.FC = () => {
   const [nameTop, setNameTop] = useState();
   const [nameBottom, setNameBottom] = useState();
 
-  const [nameTopStyles, setNameTopBubble] = useState();
-  const [nameTopText, setNameTopText] = useState();
-  const [nameTopStyle, setNameTopStyle] = useState();
+  const [nameTopStyles, setNameTopBubble] = useState({
+    bubble: "",
+    text: "",
+    style: false,
+  });
+  const [nameBottomStyles, setNameBottomBubble] = useState({
+    bubble: "",
+    text: "",
+    style: false,
+  });
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
 
   return (
     <Grid
@@ -338,6 +359,7 @@ const Digital: React.FC = () => {
         <Header />
       </Grid>
       <Grid item>
+        {/* <Content emailChange={handleEmailChange} /> */}
         <Content />
       </Grid>
       <Grid item>
