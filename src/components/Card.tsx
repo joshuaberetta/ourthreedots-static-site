@@ -1,12 +1,33 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { PriceCard } from "../models/PriceCard.model";
 import { BOX } from "../shared/Themes";
+import { COLOURS } from "../shared/Colours";
+
+const useStyles = makeStyles(() => ({
+  button1: {
+    borderWidth: BOX.borderWidth,
+    width: 150,
+    "&:hover, &$focusVisible": {
+      // background: "none",
+    },
+  },
+}));
 
 const Card: React.FC<PriceCard> = (props) => {
+  const classes = useStyles();
+  const history = useHistory();
+
+  const handleClick = () => {
+    history.push(props.href);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <Grid
       container
@@ -45,12 +66,14 @@ const Card: React.FC<PriceCard> = (props) => {
       </Grid>
       <Grid item>
         <Button
+          className={classes.button1}
+          onClick={handleClick}
+          disableRipple
           variant="outlined"
           size="large"
           style={{
             borderColor: props.color,
-            borderWidth: BOX.borderWidth,
-            width: 150,
+            // borderWidth: BOX.borderWidth,
           }}
         >
           <Typography variant="body1" style={{ color: props.color }}>

@@ -1,5 +1,5 @@
 export interface BubbleProps {
-  side: "left" | "right";
+  side: string;
   msg: string;
   color?: string;
   borderColor?: string;

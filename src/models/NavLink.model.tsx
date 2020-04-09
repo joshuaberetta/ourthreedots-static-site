@@ -1,4 +1,4 @@
 export interface NavLinkProps {
   title: string;
-  href: string;
+  href?: string;
 }
