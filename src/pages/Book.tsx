@@ -1,8 +1,15 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import { COLOURS } from "../shared/Colours";
 
 const Book: React.FC = () => {
+  const history = useHistory();
+
+  const handleClick = () => {
+    history.push("/");
+  };
+
   return (
     <Grid
       container
@@ -40,6 +47,7 @@ const Book: React.FC = () => {
           variant="outlined"
           style={{ border: `2px solid ${COLOURS.yellow}`, width: 300 }}
           disableRipple
+          onClick={handleClick}
         >
           <Typography variant="h3">
             <span role="img" aria-label="emoji">
