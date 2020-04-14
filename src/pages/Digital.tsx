@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "date-fns";
-import { Grid, Typography, IconButton } from "@material-ui/core";
+import { Grid, Typography, IconButton, Paper } from "@material-ui/core";
 import { SwatchesPicker } from "react-color";
 
 import Bubble from "../components/Bubble";
@@ -31,7 +31,17 @@ const CONTENT = [
   },
 ];
 
-const Styling: React.FC = () => {
+interface StylingProps {
+  nameTop: string;
+  backgroundTop: any;
+  setBackgroundTop: (color: any) => void;
+  textTop: any;
+  setTextTop: (color: any) => void;
+  filledTop: boolean;
+  setFilledTop: (event: boolean) => void;
+}
+
+const Styling: React.FC<StylingProps> = (props) => {
   return (
     <Grid
       container
@@ -41,17 +51,31 @@ const Styling: React.FC = () => {
       spacing={3}
     >
       <Grid item>
-        <PersonalStyle name={"adsf"} />
+        <PersonalStyle
+          name={props.nameTop}
+          background={props.backgroundTop}
+          setBackground={props.setBackgroundTop}
+          text={props.textTop}
+          setText={props.setTextTop}
+          filled={props.filledTop}
+          setFilled={props.setFilledTop}
+        />
       </Grid>
-      <Grid item>
-        <PersonalStyle name={"adsfdngfbv"} />
-      </Grid>
+      {/* <Grid item>
+        <PersonalStyle name={props.nameBottom} />
+      </Grid> */}
     </Grid>
   );
 };
 
 interface PersonalStyleProps {
   name: string;
+  background: any;
+  setBackground: (color: any) => void;
+  text: any;
+  setText: (color: any) => void;
+  filled: boolean;
+  setFilled: (event: any) => void;
 }
 
 const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
@@ -59,18 +83,21 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
     boolean
   >(false);
   const [displayTextPicker, setDisplayTextPicker] = useState<boolean>(false);
-  const [background, setBackground] = useState<any>("grey");
-  const [text, setText] = useState<any>("grey");
-  const [filled, setFilled] = useState<boolean>(true);
+  // const [background, setBackground] = useState<any>("grey");
+  // const [text, setText] = useState<any>("grey");
+  // const [filled, setFilled] = useState<boolean>(true);
+
+  const ELEVATION = 2;
+  const BUTTON_SIZE = 55;
 
   const handlePickedBackground = (color: any) => {
-    setBackground(color);
+    props.setBackground(color);
     setDisplayBackgroundPicker((prev: boolean) => !prev);
     // console.log(color);
   };
 
   const handlePickedText = (color: any) => {
-    setText(color);
+    props.setText(color);
     setDisplayTextPicker((prev: boolean) => !prev);
     // console.log(color);
   };
@@ -84,7 +111,7 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
   };
 
   const handleFilled = () => {
-    setFilled((prev: boolean) => !prev);
+    props.setFilled((prev: boolean) => !prev);
   };
 
   return (
@@ -99,44 +126,61 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
         <Typography>{props.name}</Typography>
       </Grid>
       <Grid item>
-        <IconButton
-          disableRipple
-          onClick={handleBackgroundDisplay}
-          style={{
-            height: 55,
-            width: 55,
-            background: background.hex || "grey",
-            // border: `2px solid ${background.hex || "grey"}`,
-          }}
-        />
+        <Paper elevation={ELEVATION} style={{ borderRadius: "100%" }}>
+          <IconButton
+            disableRipple
+            onClick={handleBackgroundDisplay}
+            style={{
+              height: BUTTON_SIZE,
+              width: BUTTON_SIZE,
+              background: props.background
+                ? props.background.hex
+                : COLOURS.blue,
+              // border: `2px solid ${background.hex || "grey"}`,
+            }}
+          />
+        </Paper>
       </Grid>
       <Grid item>
-        <IconButton
-          disableRipple
-          onClick={handleTextDisplay}
-          style={{
-            height: 55,
-            width: 55,
-            background: text.hex || "grey",
-            // border: `2px solid ${text.hex || "grey"}`,
-          }}
-        />
+        <Paper elevation={ELEVATION} style={{ borderRadius: "100%" }}>
+          <IconButton
+            disableRipple
+            onClick={handleTextDisplay}
+            style={{
+              height: BUTTON_SIZE,
+              width: BUTTON_SIZE,
+              background: props.text ? props.text.hex : COLOURS.white,
+              // border: `2px solid ${text.hex || "grey"}`,
+            }}
+          />
+        </Paper>
       </Grid>
       <Grid item>
-        <IconButton
-          disableRipple
-          onClick={handleFilled}
-          style={{
-            height: 55,
-            width: 55,
-            background: filled ? background.hex || "grey" : "none",
-            border: `2px solid ${background.hex || "grey"}`,
-          }}
-        >
-          <Typography variant="h5" style={{ color: text.hex || "black" }}>
-            T
-          </Typography>
-        </IconButton>
+        <Paper elevation={ELEVATION} style={{ borderRadius: "100%" }}>
+          <IconButton
+            disableRipple
+            onClick={handleFilled}
+            style={{
+              height: BUTTON_SIZE,
+              width: BUTTON_SIZE,
+              background: props.filled
+                ? props.background
+                  ? props.background.hex
+                  : COLOURS.blue
+                : "none",
+              border: `2px solid ${
+                props.background ? props.background.hex : COLOURS.blue
+              }`,
+            }}
+          >
+            <Typography
+              variant="h5"
+              style={{ color: props.text ? props.text.hex : COLOURS.white }}
+            >
+              T
+            </Typography>
+          </IconButton>
+        </Paper>
       </Grid>
       {displayBackgroundPicker ? (
         <Grid
@@ -144,7 +188,7 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
           style={{
             position: "absolute",
             zIndex: 2,
-            top: "50%",
+            // top: "50%",
             left: "38%",
             right: "62%",
           }}
@@ -161,9 +205,8 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
             onClick={handleBackgroundDisplay}
           />
           <SwatchesPicker
-            color={background.rgb}
+            color={props.background ? props.background.rgb : "rgb(255,255,255)"}
             onChange={handlePickedBackground}
-            // triangle={"hide"}
           />
         </Grid>
       ) : null}
@@ -173,7 +216,7 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
           style={{
             position: "absolute",
             zIndex: 2,
-            top: "50%",
+            // top: "50%",
             left: "38%",
             right: "62%",
           }}
@@ -190,9 +233,8 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
             onClick={handleTextDisplay}
           />
           <SwatchesPicker
-            color={text.rgb}
+            color={props.text ? props.text.rgb : COLOURS.white}
             onChange={handlePickedText}
-            // triangle={"hide"}
           />
         </Grid>
       ) : null}
@@ -200,19 +242,69 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
   );
 };
 
-const Messages: React.FC = () => {
+interface MessagesProps {
+  backgroundTop: any;
+  textTop: any;
+  filledTop: boolean;
+}
+
+const Messages: React.FC<MessagesProps> = (props) => {
   return (
     <Grid container direction="column" spacing={2}>
-      {CONTENT.map((message) => (
-        <Grid item>
-          <Bubble {...message} />
-        </Grid>
-      ))}
+      {CONTENT.map((message) => {
+        if (message.side === "left") {
+          return (
+            <Grid item>
+              <Bubble
+                {...message}
+                background={
+                  props.filledTop
+                    ? props.backgroundTop
+                      ? props.backgroundTop.hex
+                      : COLOURS.blue
+                    : COLOURS.white
+                }
+                color={props.textTop ? props.textTop.hex : COLOURS.white}
+                borderColor={
+                  !props.filledTop
+                    ? props.backgroundTop
+                      ? props.backgroundTop.hex
+                      : COLOURS.blue
+                    : COLOURS.white
+                }
+              />
+            </Grid>
+          );
+        } else {
+          return (
+            <Grid item>
+              <Bubble {...message} />
+            </Grid>
+          );
+        }
+      })}
     </Grid>
   );
 };
 
-const StyleBlock: React.FC = () => {
+interface StyleBlockProps {
+  nameTop: string;
+  backgroundTop: any;
+  setBackgroundTop: (color: any) => void;
+  textTop: any;
+  setTextTop: (color: any) => void;
+  filledTop: boolean;
+  setFilledTop: (event: any) => void;
+  // nameBottom: string;
+  // backgroundBottom?: any;
+  // setBackgroundBottom?: () => void;
+  // textBottom?: any;
+  // setTextBottom?: () => void;
+  // filledBottom?: any;
+  // setFilledBottom?: () => void;
+}
+
+const StyleBlock: React.FC<StyleBlockProps> = (props) => {
   return (
     <Grid
       container
@@ -222,26 +314,37 @@ const StyleBlock: React.FC = () => {
       spacing={10}
     >
       <Grid item>
-        <Styling />
+        <Styling
+          nameTop={props.nameTop}
+          backgroundTop={props.backgroundTop}
+          setBackgroundTop={props.setBackgroundTop}
+          textTop={props.textTop}
+          setTextTop={props.setTextTop}
+          filledTop={props.filledTop}
+          setFilledTop={props.setFilledTop}
+        />
       </Grid>
       <Grid item>
-        <Messages />
+        <Messages
+          backgroundTop={props.backgroundTop}
+          textTop={props.textTop}
+          filledTop={props.filledTop}
+        />
       </Grid>
     </Grid>
   );
 };
 
 const Digital: React.FC = () => {
-  const [nameTopStyles, setNameTopBubble] = useState({
-    bubble: "",
-    text: "",
-    style: false,
-  });
-  const [nameBottomStyles, setNameBottomBubble] = useState({
-    bubble: "",
-    text: "",
-    style: false,
-  });
+  const [nameTop, setNameTop] = useState<string>("John");
+  const [backgroundTop, setBackgroundTop] = useState<any>();
+  const [textTop, setTextTop] = useState<any>();
+  const [filledTop, setFilledTop] = useState<boolean>(true);
+
+  const [nameBottom, setNameBottom] = useState<string>("Jane");
+  const [backgroundBottom, setBackgroundBottom] = useState<any>();
+  const [textBottom, setTextBottom] = useState<any>();
+  const [filledBottom, setFilledBottom] = useState<boolean>(false);
 
   return (
     <Grid
@@ -256,7 +359,15 @@ const Digital: React.FC = () => {
         <Typography variant="h4">Make the look your own</Typography>
       </Grid>
       <Grid item>
-        <StyleBlock />
+        <StyleBlock
+          nameTop={nameTop}
+          backgroundTop={backgroundTop}
+          setBackgroundTop={setBackgroundTop}
+          textTop={textTop}
+          setTextTop={setTextTop}
+          filledTop={filledTop}
+          setFilledTop={setFilledTop}
+        />
       </Grid>
     </Grid>
   );
