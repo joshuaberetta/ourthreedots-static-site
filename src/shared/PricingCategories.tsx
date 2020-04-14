@@ -18,7 +18,7 @@ export const CATEGORIES: PriceCard[] = [
     description:
       "the insights and chat, in digital form. Custom look and feel 😀",
     price: "$ 9.99",
-    href: HREFS.digital,
+    href: HREFS.digitalForm,
     background: COLOURS.yellow,
     color: COLOURS.red,
   },

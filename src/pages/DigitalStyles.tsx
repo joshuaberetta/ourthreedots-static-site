@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import "date-fns";
-import { Grid, Typography, IconButton, Paper } from "@material-ui/core";
+import { Grid, Typography, IconButton, Paper, Button } from "@material-ui/core";
 import { SwatchesPicker } from "react-color";
 
 import Bubble from "../components/Bubble";
@@ -391,7 +392,28 @@ const StyleBlock: React.FC<StyleBlockProps> = (props) => {
   );
 };
 
-const Digital: React.FC = () => {
+interface PurchaseProps {
+  onClick: (event: any) => void;
+}
+
+const Purchase: React.FC<PurchaseProps> = (props) => {
+  return (
+    <Button
+      variant="outlined"
+      style={{ border: `2px solid ${CAT.color}`, width: 300 }}
+      disableRipple
+      onClick={props.onClick}
+    >
+      <Typography variant="h3">
+        <span role="img" aria-label="emoji">
+          👉 👉 👉
+        </span>
+      </Typography>
+    </Button>
+  );
+};
+
+const DigitalStyles: React.FC = () => {
   const [nameTop, setNameTop] = useState<string>("John");
   const [backgroundTop, setBackgroundTop] = useState<any>();
   const [textTop, setTextTop] = useState<any>();
@@ -402,17 +424,31 @@ const Digital: React.FC = () => {
   const [textBottom, setTextBottom] = useState<any>();
   const [filledBottom, setFilledBottom] = useState<boolean>(false);
 
+  const [clicked, setClicked] = useState<boolean>(false);
+  const history = useHistory();
+
+  const handleClick = (event: MouseEvent) => {
+    event.preventDefault();
+    setClicked((prev: boolean) => !prev);
+    history.push("/payment");
+  };
+
   return (
     <Grid
       container
       direction="column"
       justify="flex-start"
       alignItems="center"
-      spacing={5}
-      style={{ marginTop: 20 }}
+      spacing={10}
+      style={{ marginTop: 20, height: "40rem" }}
     >
       <Grid item>
-        <Typography variant="h4">Make the look your own</Typography>
+        <Typography variant="h4">
+          Make the look your own{" "}
+          <span role="img" aria-label="emoji">
+            💅
+          </span>
+        </Typography>
       </Grid>
       <Grid item>
         <StyleBlock
@@ -433,8 +469,11 @@ const Digital: React.FC = () => {
           setFilledBottom={setFilledBottom}
         />
       </Grid>
+      <Grid item>
+        <Purchase onClick={handleClick} />
+      </Grid>
     </Grid>
   );
 };
 
-export default Digital;
+export default DigitalStyles;

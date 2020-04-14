@@ -1,7 +1,8 @@
 export const HREFS = {
   home: "/",
   insightful: "/insightful",
-  digital: "/digital",
+  digitalForm: "/digital",
+  digitalStyles: "/digital/styles",
   book: "/book",
   payment: "/payment",
   success: "/success",
