@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import "date-fns";
 import { Grid, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
@@ -262,6 +263,7 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
 };
 
 const Insightful: React.FC = () => {
+  const history = useHistory();
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
     new Date(),
   );
@@ -306,6 +308,7 @@ const Insightful: React.FC = () => {
   const handleClick = (event: MouseEvent) => {
     event.preventDefault();
     setClicked((prev: boolean) => !prev);
+    history.push("/payment");
   };
 
   // const handlers = [

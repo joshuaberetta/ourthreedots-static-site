@@ -3,4 +3,6 @@ export const HREFS = {
   insightful: "/insightful",
   digital: "/digital",
   book: "/book",
+  payment: "/payment",
+  success: "/success",
 };
