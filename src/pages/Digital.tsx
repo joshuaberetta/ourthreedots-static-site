@@ -39,6 +39,14 @@ interface StylingProps {
   setTextTop: (color: any) => void;
   filledTop: boolean;
   setFilledTop: (event: boolean) => void;
+  //
+  nameBottom: string;
+  backgroundBottom: any;
+  setBackgroundBottom: (color: any) => void;
+  textBottom: any;
+  setTextBottom: (color: any) => void;
+  filledBottom: boolean;
+  setFilledBottom: (event: boolean) => void;
 }
 
 const Styling: React.FC<StylingProps> = (props) => {
@@ -59,11 +67,23 @@ const Styling: React.FC<StylingProps> = (props) => {
           setText={props.setTextTop}
           filled={props.filledTop}
           setFilled={props.setFilledTop}
+          defaultBackground={COLOURS.blue}
+          defaultText={COLOURS.white}
         />
       </Grid>
-      {/* <Grid item>
-        <PersonalStyle name={props.nameBottom} />
-      </Grid> */}
+      <Grid item>
+        <PersonalStyle
+          name={props.nameBottom}
+          background={props.backgroundBottom}
+          setBackground={props.setBackgroundBottom}
+          text={props.textBottom}
+          setText={props.setTextBottom}
+          filled={props.filledBottom}
+          setFilled={props.setFilledBottom}
+          defaultBackground={COLOURS.red}
+          defaultText={COLOURS.red}
+        />
+      </Grid>
     </Grid>
   );
 };
@@ -76,6 +96,8 @@ interface PersonalStyleProps {
   setText: (color: any) => void;
   filled: boolean;
   setFilled: (event: any) => void;
+  defaultBackground: string;
+  defaultText: string;
 }
 
 const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
@@ -135,7 +157,7 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
               width: BUTTON_SIZE,
               background: props.background
                 ? props.background.hex
-                : COLOURS.blue,
+                : props.defaultBackground,
               // border: `2px solid ${background.hex || "grey"}`,
             }}
           />
@@ -149,7 +171,7 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
             style={{
               height: BUTTON_SIZE,
               width: BUTTON_SIZE,
-              background: props.text ? props.text.hex : COLOURS.white,
+              background: props.text ? props.text.hex : props.defaultText,
               // border: `2px solid ${text.hex || "grey"}`,
             }}
           />
@@ -166,16 +188,18 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
               background: props.filled
                 ? props.background
                   ? props.background.hex
-                  : COLOURS.blue
+                  : props.defaultBackground
                 : "none",
               border: `2px solid ${
-                props.background ? props.background.hex : COLOURS.blue
+                props.background
+                  ? props.background.hex
+                  : props.defaultBackground
               }`,
             }}
           >
             <Typography
               variant="h5"
-              style={{ color: props.text ? props.text.hex : COLOURS.white }}
+              style={{ color: props.text ? props.text.hex : props.defaultText }}
             >
               T
             </Typography>
@@ -233,7 +257,7 @@ const PersonalStyle: React.FC<PersonalStyleProps> = (props) => {
             onClick={handleTextDisplay}
           />
           <SwatchesPicker
-            color={props.text ? props.text.rgb : COLOURS.white}
+            color={props.text ? props.text.rgb : props.defaultText}
             onChange={handlePickedText}
           />
         </Grid>
@@ -246,6 +270,9 @@ interface MessagesProps {
   backgroundTop: any;
   textTop: any;
   filledTop: boolean;
+  backgroundBottom: any;
+  textBottom: any;
+  filledBottom: boolean;
 }
 
 const Messages: React.FC<MessagesProps> = (props) => {
@@ -278,7 +305,24 @@ const Messages: React.FC<MessagesProps> = (props) => {
         } else {
           return (
             <Grid item>
-              <Bubble {...message} />
+              <Bubble
+                {...message}
+                background={
+                  props.filledBottom
+                    ? props.backgroundBottom
+                      ? props.backgroundBottom.hex
+                      : COLOURS.red
+                    : COLOURS.white
+                }
+                color={props.textBottom ? props.textBottom.hex : COLOURS.red}
+                borderColor={
+                  !props.filledBottom
+                    ? props.backgroundBottom
+                      ? props.backgroundBottom.hex
+                      : COLOURS.red
+                    : COLOURS.white
+                }
+              />
             </Grid>
           );
         }
@@ -295,13 +339,13 @@ interface StyleBlockProps {
   setTextTop: (color: any) => void;
   filledTop: boolean;
   setFilledTop: (event: any) => void;
-  // nameBottom: string;
-  // backgroundBottom?: any;
-  // setBackgroundBottom?: () => void;
-  // textBottom?: any;
-  // setTextBottom?: () => void;
-  // filledBottom?: any;
-  // setFilledBottom?: () => void;
+  nameBottom: string;
+  backgroundBottom: any;
+  setBackgroundBottom: (color: any) => void;
+  textBottom: any;
+  setTextBottom: (color: any) => void;
+  filledBottom: any;
+  setFilledBottom: (event: any) => void;
 }
 
 const StyleBlock: React.FC<StyleBlockProps> = (props) => {
@@ -322,6 +366,14 @@ const StyleBlock: React.FC<StyleBlockProps> = (props) => {
           setTextTop={props.setTextTop}
           filledTop={props.filledTop}
           setFilledTop={props.setFilledTop}
+          //
+          nameBottom={props.nameBottom}
+          backgroundBottom={props.backgroundBottom}
+          setBackgroundBottom={props.setBackgroundBottom}
+          textBottom={props.textBottom}
+          setTextBottom={props.setTextBottom}
+          filledBottom={props.filledBottom}
+          setFilledBottom={props.setFilledBottom}
         />
       </Grid>
       <Grid item>
@@ -329,6 +381,10 @@ const StyleBlock: React.FC<StyleBlockProps> = (props) => {
           backgroundTop={props.backgroundTop}
           textTop={props.textTop}
           filledTop={props.filledTop}
+          //
+          backgroundBottom={props.backgroundBottom}
+          textBottom={props.textBottom}
+          filledBottom={props.filledBottom}
         />
       </Grid>
     </Grid>
@@ -367,6 +423,14 @@ const Digital: React.FC = () => {
           setTextTop={setTextTop}
           filledTop={filledTop}
           setFilledTop={setFilledTop}
+          //
+          nameBottom={nameBottom}
+          backgroundBottom={backgroundBottom}
+          setBackgroundBottom={setBackgroundBottom}
+          textBottom={textBottom}
+          setTextBottom={setTextBottom}
+          filledBottom={filledBottom}
+          setFilledBottom={setFilledBottom}
         />
       </Grid>
     </Grid>
