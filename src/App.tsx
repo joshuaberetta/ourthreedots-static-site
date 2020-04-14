@@ -19,8 +19,8 @@ import Insightful from "./pages/Insightful";
 import Digital from "./pages/Digital";
 import Book from "./pages/Book";
 
-import Payment from "./pages/Payment";
-import Success from "./pages/Success";
+// import Payment from "./pages/Payment";
+// import Success from "./pages/Success";
 
 import { HREFS } from "./shared/Hrefs";
 // import Payment from './pages/'
@@ -65,12 +65,12 @@ const App: React.FC = () => {
           <Route path={HREFS.book} exact>
             <Book />
           </Route>
-          <Route path={HREFS.payment} exact>
+          {/* <Route path={HREFS.payment} exact>
             <Payment />
           </Route>
           <Route path={HREFS.success} exact>
             <Success />
-          </Route>
+          </Route> */}
           <Redirect to={HREFS.home} />
         </Switch>
       </Router>
