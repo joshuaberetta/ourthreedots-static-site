@@ -1,17 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "date-fns";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import { Grid, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
-import { FormContext } from "../shared/context/form-context";
+// import { FormContext } from "../shared/context/form-context";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 
@@ -38,7 +34,13 @@ const Header: React.FC = () => {
   );
 };
 
-const Content: React.FC = () => {
+interface ContentProps {
+  emailChange: (event: Event) => void;
+  nameTopChange: (event: Event) => void;
+  nameBottomChange: (event: Event) => void;
+}
+
+const Content: React.FC<ContentProps> = (props) => {
   return (
     <Grid
       container
@@ -51,7 +53,11 @@ const Content: React.FC = () => {
         <DragDrop />
       </Grid>
       <Grid item>
-        <Form />
+        <Form
+          emailChange={props.emailChange}
+          nameTopChange={props.nameTopChange}
+          nameBottomChange={props.nameBottomChange}
+        />
       </Grid>
     </Grid>
   );
@@ -82,7 +88,13 @@ const DragDrop: React.FC = () => {
   );
 };
 
-const Form: React.FC = () => {
+interface FormProps {
+  emailChange: (event: Event) => void;
+  nameTopChange: (event: Event) => void;
+  nameBottomChange: (event: Event) => void;
+}
+
+const Form: React.FC<FormProps> = (props) => {
   return (
     <Grid
       container
@@ -93,7 +105,12 @@ const Form: React.FC = () => {
     >
       {FORM_ITEMS.map((item) => (
         <Grid item>
-          <FormItem {...item} />
+          <FormItem
+            {...item}
+            emailChange={props.emailChange}
+            nameTopChange={props.nameTopChange}
+            nameBottomChange={props.nameBottomChange}
+          />
         </Grid>
       ))}
     </Grid>
@@ -122,9 +139,21 @@ interface FormItemProps {
   avatar: string;
   label: string;
   background: string;
+  emailChange: (event: any) => void;
+  nameTopChange: (event: any) => void;
+  nameBottomChange: (event: any) => void;
 }
 
 const FormItem: React.FC<FormItemProps> = (props) => {
+  let cb;
+  if (props.label === "Email") {
+    cb = props.emailChange;
+  } else if (props.label === "John") {
+    cb = props.nameTopChange;
+  } else {
+    cb = props.nameBottomChange;
+  }
+
   return (
     <Grid
       container
@@ -143,18 +172,30 @@ const FormItem: React.FC<FormItemProps> = (props) => {
           label={props.label}
           variant="outlined"
           style={{ width: 300, borderColor: CAT.color }}
+          onChange={cb}
         />
       </Grid>
     </Grid>
   );
 };
 
-const DatePickers: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
+interface DatePickersProps {
+  start: {
+    value: Date | null;
+    cb: (date: Date | null) => void;
   };
+  end: {
+    value: Date | null;
+    cb: (date: Date | null) => void;
+  };
+}
+
+const DatePickers: React.FC<DatePickersProps> = (props) => {
+  // const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // const handleDateChange = (date) => {
+  //   setSelectedDate(date);
+  // };
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid
@@ -168,12 +209,12 @@ const DatePickers: React.FC = () => {
           <KeyboardDatePicker
             disableToolbar
             // variant="inline"
-            format="MM/dd/yyyy"
+            format="dd/MM/yyyy"
             margin="normal"
             id="date-picker-inline"
             label="Start date"
-            value={selectedDate}
-            onChange={handleDateChange}
+            value={props.start.value}
+            onChange={props.start.cb}
             KeyboardButtonProps={{
               "aria-label": "change date",
             }}
@@ -183,12 +224,12 @@ const DatePickers: React.FC = () => {
           <KeyboardDatePicker
             disableToolbar
             // variant="inline"
-            format="MM/dd/yyyy"
+            format="dd/MM/yyyy"
             margin="normal"
             id="date-picker-inline"
             label="End date"
-            value={selectedDate}
-            onChange={handleDateChange}
+            value={props.end.value}
+            onChange={props.end.cb}
             KeyboardButtonProps={{
               "aria-label": "change date",
             }}
@@ -199,12 +240,17 @@ const DatePickers: React.FC = () => {
   );
 };
 
-const Purchase: React.FC = () => {
+interface PurchaseProps {
+  onClick: (event: any) => void;
+}
+
+const Purchase: React.FC<PurchaseProps> = (props) => {
   return (
     <Button
       variant="outlined"
       style={{ border: `2px solid ${CAT.color}`, width: 300 }}
       disableRipple
+      onClick={props.onClick}
     >
       <Typography variant="h3">
         <span role="img" aria-label="emoji">
@@ -216,6 +262,72 @@ const Purchase: React.FC = () => {
 };
 
 const Insightful: React.FC = () => {
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
+    new Date(),
+  );
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(
+    new Date(),
+  );
+  const [email, setEmail] = useState<string | null>();
+  const [nameTop, setNameTop] = useState<string | null>();
+  const [nameBottom, setNameBotton] = useState<string | null>();
+  const [clicked, setClicked] = useState<boolean>(false);
+
+  const handleStartDateChange = (date: Date | null) => {
+    setSelectedStartDate(date);
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    setSelectedEndDate(date);
+  };
+
+  const handleEmailChange = (event: Event) => {
+    setEmail((event.target as HTMLInputElement).value);
+  };
+
+  useEffect(() => {
+    console.log({
+      selectedStartDate,
+      selectedEndDate,
+      email,
+      nameTop,
+      nameBottom,
+    });
+  }, [clicked]);
+
+  const handleNameTopChange = (event: Event) => {
+    setNameTop((event.target as HTMLInputElement).value);
+  };
+
+  const handleNameBottomChange = (event: Event) => {
+    setNameBotton((event.target as HTMLInputElement).value);
+  };
+
+  const handleClick = (event: MouseEvent) => {
+    event.preventDefault();
+    setClicked((prev: boolean) => !prev);
+  };
+
+  // const handlers = [
+  //   {
+  //     label: "email",
+  //     cb: handleEmailChange,
+  //   },
+  //   {
+  //     label: "nameTop",
+  //     cb: handleNameTopChange,
+  //   },
+  //   {
+  //     label: "nameBottom",
+  //     cb: handleNameBottomChange,
+  //   },
+  // ];
+
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   console.log({ email, nameTop, nameBottom });
+  // };
+
   return (
     <Grid
       container
@@ -229,13 +341,20 @@ const Insightful: React.FC = () => {
         <Header />
       </Grid>
       <Grid item>
-        <Content />
+        <Content
+          emailChange={handleEmailChange}
+          nameTopChange={handleNameTopChange}
+          nameBottomChange={handleNameBottomChange}
+        />
       </Grid>
       <Grid item>
-        <DatePickers />
+        <DatePickers
+          start={{ value: selectedStartDate, cb: handleStartDateChange }}
+          end={{ value: selectedEndDate, cb: handleEndDateChange }}
+        />
       </Grid>
       <Grid item>
-        <Purchase />
+        <Purchase onClick={handleClick} />
       </Grid>
     </Grid>
   );

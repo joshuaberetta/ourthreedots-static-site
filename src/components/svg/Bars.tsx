@@ -13,32 +13,32 @@ const BARS: BarProps[] = [
   {
     emoji: "🤡",
     color: COLOURS.red,
-    height: 100,
+    height: ~~(Math.random() * 200),
   },
   {
     emoji: "🎲",
     color: COLOURS.blue,
-    height: 60,
+    height: ~~(Math.random() * 200),
   },
   {
     emoji: "🕺",
     color: COLOURS.green,
-    height: 200,
+    height: ~~(Math.random() * 200),
   },
   {
     emoji: "🔥",
     color: COLOURS.yellow,
-    height: 150,
+    height: ~~(Math.random() * 200),
   },
   {
     emoji: "😀",
     color: COLOURS.red,
-    height: 200,
+    height: ~~(Math.random() * 200),
   },
   {
     emoji: "🙌",
     color: COLOURS.blue,
-    height: 150,
+    height: ~~(Math.random() * 200),
   },
 ];
 
