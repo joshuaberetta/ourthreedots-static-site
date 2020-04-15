@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import "date-fns";
 import { Grid, Typography, IconButton, Paper, Button } from "@material-ui/core";
@@ -6,6 +6,7 @@ import { SwatchesPicker } from "react-color";
 
 import Bubble from "../components/Bubble";
 
+import { StylesContext } from "../shared/context/form-context";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 
@@ -414,6 +415,7 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
 };
 
 const DigitalStyles: React.FC = () => {
+  const context = useContext(StylesContext);
   const [nameTop, setNameTop] = useState<string>("John");
   const [backgroundTop, setBackgroundTop] = useState<any>();
   const [textTop, setTextTop] = useState<any>();
@@ -429,6 +431,17 @@ const DigitalStyles: React.FC = () => {
 
   const handleClick = (event: MouseEvent) => {
     event.preventDefault();
+    context.updateStyles({
+      backgroundTop: backgroundTop ? backgroundTop.hex : COLOURS.blue,
+      textTop: textTop ? textTop.hex : COLOURS.white,
+      filledTop: filledTop,
+      backgroundBottom: backgroundBottom ? backgroundBottom.hex : COLOURS.red,
+      textBottom: textBottom ? textBottom.hex : COLOURS.red,
+      filledBottom: filledBottom,
+      dbUpdated: false,
+      styleLoading: false,
+      isStyleValid: false,
+    });
     setClicked((prev: boolean) => !prev);
     history.push("/payment");
   };

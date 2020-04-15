@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import "date-fns";
 import { Grid, Typography, Avatar, TextField, Button } from "@material-ui/core";
@@ -8,7 +8,7 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
-// import { FormContext } from "../shared/context/form-context";
+import { FirstFormContext } from "../shared/context/form-context";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 
@@ -182,12 +182,12 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
 interface DatePickersProps {
   start: {
-    value: Date | null;
-    cb: (date: Date | null) => void;
+    value: Date;
+    cb: (date: any) => void;
   };
   end: {
-    value: Date | null;
-    cb: (date: Date | null) => void;
+    value: Date;
+    cb: (date: any) => void;
   };
 }
 
@@ -263,23 +263,20 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
 };
 
 const Insightful: React.FC = () => {
+  const context = useContext(FirstFormContext);
   const history = useHistory();
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(
-    new Date(),
-  );
-  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(
-    new Date(),
-  );
-  const [email, setEmail] = useState<string | null>();
-  const [nameTop, setNameTop] = useState<string | null>();
-  const [nameBottom, setNameBotton] = useState<string | null>();
+  const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
+  const [selectedEndDate, setSelectedEndDate] = useState<Date>(new Date());
+  const [email, setEmail] = useState<string>("");
+  const [nameTop, setNameTop] = useState<string>("");
+  const [nameBottom, setNameBotton] = useState<string>("");
   const [clicked, setClicked] = useState<boolean>(false);
 
-  const handleStartDateChange = (date: Date | null) => {
+  const handleStartDateChange = (date: Date) => {
     setSelectedStartDate(date);
   };
 
-  const handleEndDateChange = (date: Date | null) => {
+  const handleEndDateChange = (date: Date) => {
     setSelectedEndDate(date);
   };
 
@@ -287,15 +284,15 @@ const Insightful: React.FC = () => {
     setEmail((event.target as HTMLInputElement).value);
   };
 
-  useEffect(() => {
-    console.log({
-      selectedStartDate,
-      selectedEndDate,
-      email,
-      nameTop,
-      nameBottom,
-    });
-  }, [clicked]);
+  // useEffect(() => {
+  //   console.log({
+  //     selectedStartDate,
+  //     selectedEndDate,
+  //     email,
+  //     nameTop,
+  //     nameBottom,
+  //   });
+  // }, [clicked]);
 
   const handleNameTopChange = (event: Event) => {
     setNameTop((event.target as HTMLInputElement).value);
@@ -307,6 +304,16 @@ const Insightful: React.FC = () => {
 
   const handleClick = (event: MouseEvent) => {
     event.preventDefault();
+    context.updateForm({
+      email: email,
+      nameTop: nameTop,
+      nameBottom: nameBottom,
+      fileUploaded: false,
+      dateStart: selectedStartDate,
+      dateEnd: selectedEndDate,
+      isFormValid: false,
+      formLoading: false,
+    });
     setClicked((prev: boolean) => !prev);
     history.push("/payment");
   };

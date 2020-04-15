@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { CategoryContext } from "../shared/context/form-context";
 import { PriceCard } from "../models/PriceCard.model";
 import { BOX } from "../shared/Themes";
 import { COLOURS } from "../shared/Colours";
@@ -20,10 +21,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Card: React.FC<PriceCard> = (props) => {
+  const context = useContext(CategoryContext);
   const classes = useStyles();
   const history = useHistory();
 
   const handleClick = () => {
+    context.updateCategry(props.title);
     history.push(props.href);
     window.scrollTo(0, 0);
   };
