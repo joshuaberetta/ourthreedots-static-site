@@ -1,18 +1,74 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import "date-fns";
-import { Grid, Typography, Avatar, TextField, Button } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Avatar,
+  TextField,
+  Button,
+  IconButton,
+} from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
-import { FirstFormContext } from "../shared/context/form-context";
+import {
+  FirstFormContext,
+  LocationContext,
+} from "../shared/context/form-context";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 
 const CAT = CATEGORIES.filter((cat) => cat.title === "insightful")[0];
+
+interface CrumbProps {
+  href: string;
+  title: string;
+  disabled: boolean;
+}
+
+const Crumb: React.FC<CrumbProps> = (props) => {
+  const history = useHistory();
+  return (
+    <Button
+      onClick={() => {
+        history.push(props.href);
+      }}
+      disabled={props.disabled}
+      disableRipple
+    >
+      <Typography variant="h6">{props.title}</Typography>
+    </Button>
+  );
+};
+
+const Breadcrumbs: React.FC = () => {
+  return (
+    <Grid
+      container
+      direction="row"
+      alignItems="center"
+      justify="center"
+      spacing={10}
+    >
+      <Grid item>
+        <Crumb title="🏠" href="/" disabled={false} />
+      </Grid>
+      <Grid item>
+        <Crumb title="✍️" href="/insightful" disabled={false} />
+      </Grid>
+      <Grid item>
+        <Crumb title="💰" href="/" disabled={true} />
+      </Grid>
+      <Grid item>
+        <Crumb title="🎉" href="/" disabled={true} />
+      </Grid>
+    </Grid>
+  );
+};
 
 const Header: React.FC = () => {
   return (
@@ -264,6 +320,7 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
 
 const Insightful: React.FC = () => {
   const context = useContext(FirstFormContext);
+  const locationContext = useContext(LocationContext);
   const history = useHistory();
   const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
   const [selectedEndDate, setSelectedEndDate] = useState<Date>(new Date());
@@ -284,15 +341,9 @@ const Insightful: React.FC = () => {
     setEmail((event.target as HTMLInputElement).value);
   };
 
-  // useEffect(() => {
-  //   console.log({
-  //     selectedStartDate,
-  //     selectedEndDate,
-  //     email,
-  //     nameTop,
-  //     nameBottom,
-  //   });
-  // }, [clicked]);
+  useEffect(() => {
+    locationContext.updateLocation("/insightful");
+  }, []);
 
   const handleNameTopChange = (event: Event) => {
     setNameTop((event.target as HTMLInputElement).value);
@@ -345,8 +396,11 @@ const Insightful: React.FC = () => {
       justify="flex-start"
       alignItems="center"
       spacing={5}
-      style={{ marginTop: 20 }}
+      style={{ marginTop: 70, marginBottom: 20 }}
     >
+      <Grid item style={{ position: "absolute", top: 10 }}>
+        <Breadcrumbs />
+      </Grid>
       <Grid item>
         <Header />
       </Grid>

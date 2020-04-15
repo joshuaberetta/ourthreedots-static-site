@@ -5,7 +5,7 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
-
+import { uuid } from "uuidv4";
 import {
   FormContext,
   CategoryContext,
@@ -13,6 +13,7 @@ import {
   IdContext,
   StylesContext,
   PaymentContext,
+  LocationContext,
 } from "./shared/context/form-context";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
@@ -88,10 +89,16 @@ const App: React.FC = () => {
     paymentConfirmed: false,
     paymentLoading: false,
   });
+  const [location, setLocation] = useState<string>("/");
+
+  const updateLocation = useCallback((loc: string) => {
+    setLocation(loc);
+  }, []);
 
   useEffect(() => {
-    setId("qwert12345");
-  }, [category]);
+    setId(uuid());
+    setLocation("/");
+  }, []);
 
   const updateForm = useCallback(
     (updatedItems: FormContextType) => {
@@ -165,38 +172,43 @@ const App: React.FC = () => {
                   updatePayment: updatePayment,
                 }}
               >
-                <Router>
-                  <NavBar />
-                  <Switch>
-                    <Route path={HREFS.home} exact>
-                      <Home />
-                      <Product />
-                      <Features />
-                      <Insights />
-                      <Pricing />
-                      <Footer />
-                    </Route>
-                    <Route path={HREFS.insightful} exact>
-                      <Insightful />
-                    </Route>
-                    <Route path={HREFS.digitalForm} exact>
-                      <DigitalForm />
-                    </Route>
-                    <Route path={HREFS.digitalStyles} exact>
-                      <DigitalStyles />
-                    </Route>
-                    <Route path={HREFS.book} exact>
-                      <Book />
-                    </Route>
-                    <Route path={HREFS.payment} exact>
-                      <Payment />
-                    </Route>
-                    <Route path={HREFS.success} exact>
-                      <Success />
-                    </Route>
-                    <Redirect to={HREFS.home} />
-                  </Switch>
-                </Router>
+                <LocationContext.Provider
+                  value={{ location: location, updateLocation: updateLocation }}
+                >
+                  <Router>
+                    {/* {location === "/" ? <NavBar /> : null} */}
+                    <Switch>
+                      <Route path={HREFS.home} exact>
+                        <NavBar />
+                        <Home />
+                        <Product />
+                        <Features />
+                        <Insights />
+                        <Pricing />
+                        <Footer />
+                      </Route>
+                      <Route path={HREFS.insightful} exact>
+                        <Insightful />
+                      </Route>
+                      <Route path={HREFS.digitalForm} exact>
+                        <DigitalForm />
+                      </Route>
+                      <Route path={HREFS.digitalStyles} exact>
+                        <DigitalStyles />
+                      </Route>
+                      <Route path={HREFS.book} exact>
+                        <Book />
+                      </Route>
+                      <Route path={HREFS.payment} exact>
+                        <Payment />
+                      </Route>
+                      <Route path={HREFS.success} exact>
+                        <Success />
+                      </Route>
+                      <Redirect to={HREFS.home} />
+                    </Switch>
+                  </Router>
+                </LocationContext.Provider>
               </PaymentContext.Provider>
             </IdContext.Provider>
           </CategoryContext.Provider>

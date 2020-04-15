@@ -1,5 +1,10 @@
 import { createContext } from "react";
 
+export const LocationContext = createContext({
+  location: "",
+  updateLocation: (location: string) => {},
+});
+
 export const IdContext = createContext({
   id: "",
 });

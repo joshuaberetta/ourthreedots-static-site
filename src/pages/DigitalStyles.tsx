@@ -456,7 +456,7 @@ const DigitalStyles: React.FC = () => {
       style={{ marginTop: 20, height: "40rem" }}
     >
       <Grid item>
-        <Typography variant="h4">
+        <Typography variant="h4" style={{ color: COLOURS.red }}>
           Make the look your own{" "}
           <span role="img" aria-label="emoji">
             💅
