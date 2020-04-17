@@ -5,6 +5,8 @@ import { Grid, Typography, Button, TextField, Paper } from "@material-ui/core";
 import { COLOURS } from "../shared/Colours";
 import { LocationContext } from "../shared/context/form-context";
 
+import PaymentForm from "./payment/index";
+
 interface CrumbProps {
   href: string;
   title: string;
@@ -72,12 +74,12 @@ const CustomButton: React.FC<CustomButtonProps> = (props) => {
 
 const Payment: React.FC = () => {
   const locationContext = useContext(LocationContext);
-  const history = useHistory();
+  // const history = useHistory();
 
-  const handleClick = () => {
-    locationContext.updateLocation("/payment");
-    history.push("/success");
-  };
+  // const handleClick = () => {
+  //   locationContext.updateLocation("/payment");
+  //   history.push("/success");
+  // };
 
   useEffect(() => {
     locationContext.updateLocation("/payment");
@@ -96,36 +98,7 @@ const Payment: React.FC = () => {
         <Breadcrumbs />
       </Grid>
       <Grid item>
-        <Paper elevation={5} style={{ borderRadius: 10 }}>
-          <Grid
-            container
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: "20rem", minWidth: "40rem" }}
-            spacing={5}
-          >
-            <Grid item>
-              <Typography variant="h4">
-                Payment Details{" "}
-                <span role="img" aria-label="emoji">
-                  🕺
-                </span>
-              </Typography>
-            </Grid>
-            <Grid item>
-              <TextField
-                id="outlined-basic"
-                label="4242 4242 4242 4242"
-                variant="outlined"
-                style={{ width: "30rem" }}
-              />
-            </Grid>
-            <Grid item>
-              <CustomButton onClick={handleClick} />
-            </Grid>
-          </Grid>
-        </Paper>
+        <PaymentForm />
       </Grid>
     </Grid>
   );

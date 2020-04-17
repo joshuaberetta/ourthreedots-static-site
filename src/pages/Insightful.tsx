@@ -7,7 +7,8 @@ import {
   Avatar,
   TextField,
   Button,
-  IconButton,
+  CircularProgress,
+  Backdrop,
 } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -18,7 +19,10 @@ import {
 import {
   FirstFormContext,
   LocationContext,
+  IdContext,
+  CategoryContext,
 } from "../shared/context/form-context";
+import { useHttpClient } from "../shared/hooks/http-hook";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 
@@ -318,9 +322,28 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
   );
 };
 
+interface LoadingSpinnerProps {
+  loading: boolean;
+  color: string;
+}
+
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
+  return (
+    <Backdrop
+      style={{ zIndex: 2, background: "rgba(255,255,255,0.7)" }}
+      open={props.loading}
+    >
+      <CircularProgress style={{ color: props.color }} />
+    </Backdrop>
+  );
+};
+
 const Insightful: React.FC = () => {
   const context = useContext(FirstFormContext);
   const locationContext = useContext(LocationContext);
+  const idContext = useContext(IdContext);
+  const categoryContext = useContext(CategoryContext);
+  const { sendRequest } = useHttpClient();
   const history = useHistory();
   const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
   const [selectedEndDate, setSelectedEndDate] = useState<Date>(new Date());
@@ -328,6 +351,7 @@ const Insightful: React.FC = () => {
   const [nameTop, setNameTop] = useState<string>("");
   const [nameBottom, setNameBotton] = useState<string>("");
   const [clicked, setClicked] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleStartDateChange = (date: Date) => {
     setSelectedStartDate(date);
@@ -353,74 +377,79 @@ const Insightful: React.FC = () => {
     setNameBotton((event.target as HTMLInputElement).value);
   };
 
-  const handleClick = (event: MouseEvent) => {
+  const handleClick = async (event: MouseEvent) => {
     event.preventDefault();
-    context.updateForm({
-      email: email,
-      nameTop: nameTop,
-      nameBottom: nameBottom,
-      fileUploaded: false,
-      dateStart: selectedStartDate,
-      dateEnd: selectedEndDate,
-      isFormValid: false,
-      formLoading: false,
-    });
-    setClicked((prev: boolean) => !prev);
-    history.push("/payment");
+
+    try {
+      setLoading((prevState: boolean) => !prevState);
+
+      const formData: FormData = new FormData();
+      formData.append("uuid", idContext.id);
+      formData.append("email", email);
+      formData.append("nameTop", nameTop);
+      formData.append("nameBottom", nameBottom);
+      formData.append("dateStart", selectedStartDate.toLocaleString("en-uk"));
+      formData.append("dateEnd", selectedEndDate.toLocaleString("en-uk"));
+      formData.append("status", "STAGE-0");
+      formData.append("category", categoryContext.category);
+
+      const responseData = await sendRequest(
+        "http://localhost:5000/api/users/insightful",
+        "POST",
+        formData,
+      );
+
+      context.updateForm({
+        email: email,
+        nameTop: nameTop,
+        nameBottom: nameBottom,
+        fileUploaded: false,
+        dateStart: selectedStartDate,
+        dateEnd: selectedEndDate,
+        isFormValid: false,
+        formLoading: false,
+      });
+
+      setClicked((prev: boolean) => !prev);
+      history.push("/payment");
+    } catch (err) {}
   };
 
-  // const handlers = [
-  //   {
-  //     label: "email",
-  //     cb: handleEmailChange,
-  //   },
-  //   {
-  //     label: "nameTop",
-  //     cb: handleNameTopChange,
-  //   },
-  //   {
-  //     label: "nameBottom",
-  //     cb: handleNameBottomChange,
-  //   },
-  // ];
-
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   console.log({ email, nameTop, nameBottom });
-  // };
-
   return (
-    <Grid
-      container
-      direction="column"
-      justify="flex-start"
-      alignItems="center"
-      spacing={5}
-      style={{ marginTop: 70, marginBottom: 20 }}
-    >
-      <Grid item style={{ position: "absolute", top: 10 }}>
-        <Breadcrumbs />
+    <React.Fragment>
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        alignItems="center"
+        spacing={5}
+        style={{ marginTop: 70, marginBottom: 20 }}
+      >
+        <Grid item style={{ position: "absolute", top: 10 }}>
+          <Breadcrumbs />
+        </Grid>
+        <Grid item>
+          <Header />
+        </Grid>
+        <Grid item>
+          <Content
+            emailChange={handleEmailChange}
+            nameTopChange={handleNameTopChange}
+            nameBottomChange={handleNameBottomChange}
+          />
+        </Grid>
+        <Grid item>
+          <DatePickers
+            start={{ value: selectedStartDate, cb: handleStartDateChange }}
+            end={{ value: selectedEndDate, cb: handleEndDateChange }}
+          />
+        </Grid>
+        <Grid item>
+          <Purchase onClick={handleClick} />
+        </Grid>
       </Grid>
-      <Grid item>
-        <Header />
-      </Grid>
-      <Grid item>
-        <Content
-          emailChange={handleEmailChange}
-          nameTopChange={handleNameTopChange}
-          nameBottomChange={handleNameBottomChange}
-        />
-      </Grid>
-      <Grid item>
-        <DatePickers
-          start={{ value: selectedStartDate, cb: handleStartDateChange }}
-          end={{ value: selectedEndDate, cb: handleEndDateChange }}
-        />
-      </Grid>
-      <Grid item>
-        <Purchase onClick={handleClick} />
-      </Grid>
-    </Grid>
+      <LoadingSpinner loading={loading} color={COLOURS.blue} />
+    </React.Fragment>
   );
 };
 

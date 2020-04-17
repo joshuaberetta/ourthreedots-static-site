@@ -27,6 +27,7 @@ import Insightful from "./pages/Insightful";
 import DigitalForm from "./pages/DigitalForm";
 import DigitalStyles from "./pages/DigitalStyles";
 import Book from "./pages/Book";
+import Form from "./pages/Form";
 
 import Payment from "./pages/Payment";
 import Success from "./pages/Success";
@@ -186,6 +187,9 @@ const App: React.FC = () => {
                         <Insights />
                         <Pricing />
                         <Footer />
+                      </Route>
+                      <Route path={"/form"} exact>
+                        <Form />
                       </Route>
                       <Route path={HREFS.insightful} exact>
                         <Insightful />
