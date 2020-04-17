@@ -1,6 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useRef,
+} from "react";
 import { useHistory } from "react-router-dom";
 import "date-fns";
+import { useDropzone } from "react-dropzone";
 import {
   Grid,
   Typography,
@@ -9,7 +16,12 @@ import {
   Button,
   CircularProgress,
   Backdrop,
+  Paper,
 } from "@material-ui/core";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import { green } from "@material-ui/core/colors";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -99,6 +111,8 @@ interface ContentProps {
   emailChange: (event: Event) => void;
   nameTopChange: (event: Event) => void;
   nameBottomChange: (event: Event) => void;
+  handleSelectedFile: (acceptedFile: any) => void;
+  acceptedFile: any;
 }
 
 const Content: React.FC<ContentProps> = (props) => {
@@ -111,7 +125,10 @@ const Content: React.FC<ContentProps> = (props) => {
       spacing={5}
     >
       <Grid item>
-        <DragDrop />
+        <BasicDD
+          handleSelectedFile={props.handleSelectedFile}
+          acceptedFile={props.acceptedFile}
+        />
       </Grid>
       <Grid item>
         <Form
@@ -338,6 +355,59 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
   );
 };
 
+//////////////////////
+
+const BasicDD = (props) => {
+  const onDropAccepted = useCallback((acceptedFiles) => {
+    props.handleSelectedFile(acceptedFiles[0]);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDropAccepted,
+    accept: "image/jpg, image/jpeg, image/png, text/plain",
+    multiple: false,
+  });
+
+  return (
+    <Grid container direction="column" alignItems="center" justify="center">
+      <Grid item {...getRootProps({ className: "dropzone" })}>
+        <Button disableRipple style={{ borderRadius: 10 }}>
+          <Grid
+            container
+            alignItems="center"
+            justify="center"
+            direction="column"
+            style={{
+              height: 300,
+              width: 300,
+              background: "none",
+              border: `dashed 2px ${CAT.color}`,
+              borderRadius: 10,
+            }}
+          >
+            <Grid item>
+              <input {...getInputProps()} />
+              {props.acceptedFile ? (
+                <Typography variant="h3">
+                  <span role="img" aria-label="emoji">
+                    👍
+                  </span>
+                </Typography>
+              ) : (
+                <Typography variant="h6" style={{ color: COLOURS.blue }}>
+                  DROP IT IN!
+                </Typography>
+              )}
+            </Grid>
+          </Grid>
+        </Button>
+      </Grid>
+    </Grid>
+  );
+};
+
+//////////////////////
+
 const Insightful: React.FC = () => {
   const context = useContext(FirstFormContext);
   const locationContext = useContext(LocationContext);
@@ -352,6 +422,11 @@ const Insightful: React.FC = () => {
   const [nameBottom, setNameBotton] = useState<string>("");
   const [clicked, setClicked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [acceptedFile, setAcceptedFile] = useState<any>();
+
+  const handleSelectedFile = (acceptedFile: any) => {
+    setAcceptedFile(acceptedFile);
+  };
 
   const handleStartDateChange = (date: Date) => {
     setSelectedStartDate(date);
@@ -392,6 +467,7 @@ const Insightful: React.FC = () => {
       formData.append("dateEnd", selectedEndDate.toLocaleString("en-uk"));
       formData.append("status", "STAGE-0");
       formData.append("category", categoryContext.category);
+      formData.append("image", acceptedFile);
 
       const responseData = await sendRequest(
         "http://localhost:5000/api/users/insightful",
@@ -436,6 +512,8 @@ const Insightful: React.FC = () => {
             emailChange={handleEmailChange}
             nameTopChange={handleNameTopChange}
             nameBottomChange={handleNameBottomChange}
+            handleSelectedFile={handleSelectedFile}
+            acceptedFile={acceptedFile}
           />
         </Grid>
         <Grid item>
