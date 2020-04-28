@@ -5,17 +5,20 @@ import { Grid, Typography, IconButton, Paper, Button } from "@material-ui/core";
 import { SwatchesPicker } from "react-color";
 
 import Bubble from "../components/Bubble";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 import { StylesContext } from "../shared/context/form-context";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
+import { DIGITAL_STYLE_CRUMBS } from "../shared/Crumbs";
 
 const CAT = CATEGORIES.filter((cat) => cat.title === "digital")[0];
 
+// TODO
 const CONTENT = [
   {
     side: "left",
-    msg: "So what does this thing actually do? ",
+    msg: "So what does this thing actually do?",
     background: COLOURS.blue,
     color: COLOURS.white,
   },
@@ -416,11 +419,12 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
 
 const DigitalStyles: React.FC = () => {
   const context = useContext(StylesContext);
+  // TODO
   const [nameTop, setNameTop] = useState<string>("John");
   const [backgroundTop, setBackgroundTop] = useState<any>();
   const [textTop, setTextTop] = useState<any>();
   const [filledTop, setFilledTop] = useState<boolean>(true);
-
+  // TODO
   const [nameBottom, setNameBottom] = useState<string>("Jane");
   const [backgroundBottom, setBackgroundBottom] = useState<any>();
   const [textBottom, setTextBottom] = useState<any>();
@@ -429,6 +433,7 @@ const DigitalStyles: React.FC = () => {
   const [clicked, setClicked] = useState<boolean>(false);
   const history = useHistory();
 
+  // TODO
   const handleClick = (event: MouseEvent) => {
     event.preventDefault();
     context.updateStyles({
@@ -452,9 +457,12 @@ const DigitalStyles: React.FC = () => {
       direction="column"
       justify="flex-start"
       alignItems="center"
-      spacing={10}
-      style={{ marginTop: 20, height: "40rem" }}
+      spacing={5}
+      style={{ marginTop: 70, marginBottom: 20 }}
     >
+      <Grid item style={{ position: "absolute", top: 10 }}>
+        <Breadcrumbs crumbs={DIGITAL_STYLE_CRUMBS} />
+      </Grid>
       <Grid item>
         <Typography variant="h4" style={{ color: COLOURS.red }}>
           Make the look your own{" "}

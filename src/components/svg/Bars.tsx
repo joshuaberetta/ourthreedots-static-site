@@ -76,7 +76,7 @@ const BarPlot = () => {
       spacing={2}
     >
       {BARS.map((bar) => (
-        <Grid item>
+        <Grid item key={bar.height}>
           <Bar {...bar} />
         </Grid>
       ))}

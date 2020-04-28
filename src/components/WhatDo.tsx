@@ -37,7 +37,7 @@ const WhatDo: React.FC = () => {
   return (
     <Grid container direction="column" spacing={2}>
       {CONTENT.map((message) => (
-        <Grid item>
+        <Grid item key={message.msg}>
           <Bubble {...message} />
         </Grid>
       ))}

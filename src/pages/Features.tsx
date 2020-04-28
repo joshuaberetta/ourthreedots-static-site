@@ -93,7 +93,7 @@ const Middle = () => (
     <Grid item>
       <Grid container direction="row" spacing={2}>
         {AVATARS.map((avatar) => (
-          <Grid item>
+          <Grid item key={avatar.name}>
             <AvatarJJ {...avatar} />
           </Grid>
         ))}

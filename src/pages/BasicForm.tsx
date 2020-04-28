@@ -12,26 +12,20 @@ import {
   FirstFormContext,
   LocationContext,
   IdContext,
-  CategoryContext,
 } from "../shared/context/form-context";
 import { useHttpClient } from "../shared/hooks/http-hook";
 
 import LoadingSpinner from "../components/LoadingSpinner";
 import Breadcrumbs from "../components/Breadcrumbs";
 import DragAndDrop from "../components/DragDrop";
+import { PriceCard } from "../models/PriceCard.model";
 
 import { CATEGORIES } from "../shared/PricingCategories";
-import { COLOURS } from "../shared/Colours";
 import { FORM_ITEMS } from "../shared/FormItems";
-import { INSIGHTFUL_FORM_CRUMBS } from "../shared/Crumbs";
+import { INSIGHTFUL_FORM_CRUMBS, DIGITAL_FORM_CRUMBS } from "../shared/Crumbs";
+import { HREFS } from "../shared/Hrefs";
 
-////////////
-
-const CAT = CATEGORIES.filter((cat) => cat.title === "insightful")[0];
-
-////////////
-
-const Header: React.FC = () => {
+const Header: React.FC<PriceCard> = (props) => {
   return (
     <Grid
       container
@@ -41,18 +35,19 @@ const Header: React.FC = () => {
       alignItems="center"
     >
       <Grid item>
-        <Typography variant="h3" style={{ color: CAT.color }}>
-          {CAT.title}
+        <Typography variant="h3" style={{ color: props.color }}>
+          {props.title}
         </Typography>
       </Grid>
       <Grid item>
-        <Typography variant="h5">{CAT.description}</Typography>
+        <Typography variant="h5">{props.description}</Typography>
       </Grid>
     </Grid>
   );
 };
 
 interface ContentProps {
+  category: PriceCard;
   emailChange: (event: Event) => void;
   nameTopChange: (event: Event) => void;
   nameBottomChange: (event: Event) => void;
@@ -71,13 +66,14 @@ const Content: React.FC<ContentProps> = (props) => {
     >
       <Grid item>
         <DragAndDrop
-          color={CAT.color}
+          color={props.category.color}
           handleSelectedFile={props.handleSelectedFile}
           acceptedFile={props.acceptedFile}
         />
       </Grid>
       <Grid item>
         <Form
+          category={props.category}
           emailChange={props.emailChange}
           nameTopChange={props.nameTopChange}
           nameBottomChange={props.nameBottomChange}
@@ -88,6 +84,7 @@ const Content: React.FC<ContentProps> = (props) => {
 };
 
 interface FormProps {
+  category: PriceCard;
   emailChange: (event: Event) => void;
   nameTopChange: (event: Event) => void;
   nameBottomChange: (event: Event) => void;
@@ -105,6 +102,7 @@ const Form: React.FC<FormProps> = (props) => {
       {FORM_ITEMS.map((item) => (
         <Grid item>
           <FormItem
+            category={props.category}
             {...item}
             emailChange={props.emailChange}
             nameTopChange={props.nameTopChange}
@@ -120,6 +118,7 @@ interface FormItemProps {
   avatar: string;
   label: string;
   background: string;
+  category: PriceCard;
   emailChange: (event: any) => void;
   nameTopChange: (event: any) => void;
   nameBottomChange: (event: any) => void;
@@ -152,7 +151,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
         <TextField
           label={props.label}
           variant="outlined"
-          style={{ width: 300, borderColor: CAT.color }}
+          style={{ width: 300 }}
           onChange={cb}
         />
       </Grid>
@@ -214,32 +213,42 @@ const DatePickers: React.FC<DatePickersProps> = (props) => {
   );
 };
 
-interface PurchaseProps {
+interface NextProps {
+  category: PriceCard;
   onClick: (event: any) => void;
 }
 
-const Purchase: React.FC<PurchaseProps> = (props) => {
+const Next: React.FC<NextProps> = (props) => {
+  let buttonText;
+  if (props.category.title === "insightful") {
+    buttonText = "👉 👉 👉";
+  } else {
+    buttonText = "💅 💅 💅";
+  }
   return (
     <Button
       variant="outlined"
-      style={{ border: `2px solid ${CAT.color}`, width: 300 }}
+      style={{ border: `2px solid ${props.category.color}`, width: 300 }}
       disableRipple
       onClick={props.onClick}
     >
       <Typography variant="h3">
         <span role="img" aria-label="emoji">
-          👉 👉 👉
+          {buttonText}
         </span>
       </Typography>
     </Button>
   );
 };
 
-const Insightful: React.FC = () => {
+interface BasicFormProps {
+  category: string;
+}
+
+const BasicForm: React.FC<BasicFormProps> = (props) => {
   const context = useContext(FirstFormContext);
   const locationContext = useContext(LocationContext);
   const idContext = useContext(IdContext);
-  const categoryContext = useContext(CategoryContext);
   const { sendRequest } = useHttpClient();
   const history = useHistory();
   const [selectedStartDate, setSelectedStartDate] = useState<Date>(new Date());
@@ -249,6 +258,25 @@ const Insightful: React.FC = () => {
   const [nameBottom, setNameBotton] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [acceptedFile, setAcceptedFile] = useState<any>();
+  const [category, setCategory] = useState<PriceCard>({
+    title: "",
+    description: "",
+    price: "",
+    href: "",
+    background: "",
+    color: "",
+  });
+
+  useEffect(() => {
+    // const url = window.location.href;
+    // const loc = getLocation(url);
+    // const loc = "digital";
+
+    locationContext.updateLocation(`/${props.category}`);
+
+    const CAT = CATEGORIES.filter((cat) => cat.title === props.category)[0];
+    setCategory(CAT);
+  }, []);
 
   const handleSelectedFile = (acceptedFile: FileList) => {
     setAcceptedFile(acceptedFile);
@@ -265,10 +293,6 @@ const Insightful: React.FC = () => {
   const handleEmailChange = (event: Event) => {
     setEmail((event.target as HTMLInputElement).value);
   };
-
-  useEffect(() => {
-    locationContext.updateLocation("/insightful");
-  }, []);
 
   const handleNameTopChange = (event: Event) => {
     setNameTop((event.target as HTMLInputElement).value);
@@ -292,9 +316,10 @@ const Insightful: React.FC = () => {
       formData.append("dateStart", selectedStartDate.toLocaleString("en-uk"));
       formData.append("dateEnd", selectedEndDate.toLocaleString("en-uk"));
       formData.append("status", "STAGE-0");
-      formData.append("category", categoryContext.category);
+      formData.append("category", props.category);
       formData.append("image", acceptedFile);
 
+      // TODO
       const responseData = await sendRequest(
         "http://localhost:5000/api/users/insightful",
         "POST",
@@ -312,7 +337,9 @@ const Insightful: React.FC = () => {
         formLoading: false,
       });
 
-      history.push("/payment");
+      history.push(
+        category.title === "insightful" ? HREFS.payment : HREFS.digitalStyles,
+      );
     } catch (err) {}
   };
 
@@ -327,13 +354,20 @@ const Insightful: React.FC = () => {
         style={{ marginTop: 70, marginBottom: 20 }}
       >
         <Grid item style={{ position: "absolute", top: 10 }}>
-          <Breadcrumbs crumbs={INSIGHTFUL_FORM_CRUMBS} />
+          <Breadcrumbs
+            crumbs={
+              category.title === "insightful"
+                ? INSIGHTFUL_FORM_CRUMBS
+                : DIGITAL_FORM_CRUMBS
+            }
+          />
         </Grid>
         <Grid item>
-          <Header />
+          <Header {...category} />
         </Grid>
         <Grid item>
           <Content
+            category={category}
             emailChange={handleEmailChange}
             nameTopChange={handleNameTopChange}
             nameBottomChange={handleNameBottomChange}
@@ -348,12 +382,12 @@ const Insightful: React.FC = () => {
           />
         </Grid>
         <Grid item>
-          <Purchase onClick={handleClick} />
+          <Next onClick={handleClick} category={category} />
         </Grid>
       </Grid>
-      <LoadingSpinner loading={loading} color={COLOURS.blue} />
+      <LoadingSpinner loading={loading} color={category.color} />
     </React.Fragment>
   );
 };
 
-export default Insightful;
+export default BasicForm;

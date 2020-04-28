@@ -22,8 +22,8 @@ import Insights from "./pages/Insights";
 import Pricing from "./pages/Pricing";
 import Footer from "./pages/Footer";
 
-import Insightful from "./pages/Insightful";
-import DigitalForm from "./pages/DigitalForm";
+import BasicForm from "./pages/BasicForm";
+// import DigitalForm from "./pages/DigitalForm";
 import DigitalStyles from "./pages/DigitalStyles";
 import Book from "./pages/Book";
 import Form from "./pages/Form";
@@ -198,10 +198,10 @@ const App: React.FC = () => {
                         <Form />
                       </Route>
                       <Route path={HREFS.insightful} exact>
-                        <Insightful />
+                        <BasicForm category={"insightful"} />
                       </Route>
                       <Route path={HREFS.digitalForm} exact>
-                        <DigitalForm />
+                        <BasicForm category={"digital"} />
                       </Route>
                       <Route path={HREFS.digitalStyles} exact>
                         <DigitalStyles />

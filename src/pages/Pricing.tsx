@@ -28,7 +28,7 @@ const Pricing: React.FC = () => {
           style={{ paddingLeft: 20, paddingRight: 20 }}
         >
           {CATEGORIES.map((card) => (
-            <Grid item>
+            <Grid item key={card.title}>
               <Card {...card} />
             </Grid>
           ))}

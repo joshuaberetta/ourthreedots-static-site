@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { CategoryContext } from "../shared/context/form-context";
 import { PriceCard } from "../models/PriceCard.model";
 import { BOX } from "../shared/Themes";
-import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles(() => ({
   button1: {

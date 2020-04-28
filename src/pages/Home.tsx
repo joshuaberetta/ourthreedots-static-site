@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 
 import Page from "./Page";
 import WannaRing from "../components/WannaRing";
-import WhatDo from "../components/WhatDo";
 import { COLOURS } from "../shared/Colours";
 
 const Words = () => {

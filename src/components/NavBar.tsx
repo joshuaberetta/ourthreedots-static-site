@@ -99,7 +99,7 @@ const NavBar: React.FC = () => {
           <Grid item>
             <Grid container direction="row" spacing={1}>
               {LINKS.map((link) => (
-                <Grid item>
+                <Grid item key={link.title}>
                   <NavLink title={link.title} href="" />
                 </Grid>
               ))}
