@@ -6,8 +6,15 @@ import { SwatchesPicker } from "react-color";
 
 import Bubble from "../components/Bubble";
 import Breadcrumbs from "../components/Breadcrumbs";
+import LoadingSpinner from "../components/LoadingSpinner";
 
-import { StylesContext } from "../shared/context/form-context";
+import { useHttpClient } from "../shared/hooks/http-hook";
+
+import {
+  StylesContext,
+  IdContext,
+  FirstFormContext,
+} from "../shared/context/form-context";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 import { DIGITAL_STYLE_CRUMBS } from "../shared/Crumbs";
@@ -419,81 +426,118 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
 
 const DigitalStyles: React.FC = () => {
   const context = useContext(StylesContext);
+  const idContext = useContext(IdContext);
+  const formContext = useContext(FirstFormContext);
   // TODO
-  const [nameTop, setNameTop] = useState<string>("John");
+  // const [nameTop, setNameTop] = useState<string>("John");
   const [backgroundTop, setBackgroundTop] = useState<any>();
   const [textTop, setTextTop] = useState<any>();
   const [filledTop, setFilledTop] = useState<boolean>(true);
   // TODO
-  const [nameBottom, setNameBottom] = useState<string>("Jane");
+  // const [nameBottom, setNameBottom] = useState<string>("Jane");
   const [backgroundBottom, setBackgroundBottom] = useState<any>();
   const [textBottom, setTextBottom] = useState<any>();
   const [filledBottom, setFilledBottom] = useState<boolean>(false);
 
-  const [clicked, setClicked] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  // const [clicked, setClicked] = useState<boolean>(false);
   const history = useHistory();
+  const { sendRequest } = useHttpClient();
 
   // TODO
-  const handleClick = (event: MouseEvent) => {
+  const handleClick = async (event: MouseEvent) => {
     event.preventDefault();
-    context.updateStyles({
-      backgroundTop: backgroundTop ? backgroundTop.hex : COLOURS.blue,
-      textTop: textTop ? textTop.hex : COLOURS.white,
-      filledTop: filledTop,
-      backgroundBottom: backgroundBottom ? backgroundBottom.hex : COLOURS.red,
-      textBottom: textBottom ? textBottom.hex : COLOURS.red,
-      filledBottom: filledBottom,
-      dbUpdated: false,
-      styleLoading: false,
-      isStyleValid: false,
-    });
-    setClicked((prev: boolean) => !prev);
-    history.push("/payment");
+
+    try {
+      setLoading((prevState: boolean) => !prevState);
+
+      const formData: FormData = new FormData();
+      formData.append("uuid", idContext.id);
+      formData.append(
+        "backgroundTop",
+        backgroundTop ? backgroundTop.hex : COLOURS.blue,
+      );
+      formData.append("textTop", textTop ? textTop.hex : COLOURS.white);
+      formData.append("filledTop", filledTop.toString());
+      formData.append(
+        "backgroundBottom",
+        backgroundBottom ? backgroundBottom.hex : COLOURS.red,
+      );
+      formData.append("textBottom", textBottom ? textBottom.hex : COLOURS.red);
+      formData.append("filledBottom", filledBottom.toString());
+      formData.append("status", "STAGE-1");
+
+      // TODO
+      const responseData = await sendRequest(
+        "http://localhost:5000/api/users/insightful",
+        "PATCH",
+        formData,
+      );
+
+      context.updateStyles({
+        backgroundTop: backgroundTop ? backgroundTop.hex : COLOURS.blue,
+        textTop: textTop ? textTop.hex : COLOURS.white,
+        filledTop: filledTop,
+        backgroundBottom: backgroundBottom ? backgroundBottom.hex : COLOURS.red,
+        textBottom: textBottom ? textBottom.hex : COLOURS.red,
+        filledBottom: filledBottom,
+        dbUpdated: false,
+        styleLoading: false,
+        isStyleValid: false,
+      });
+      // setClicked((prev: boolean) => !prev);
+      history.push("/payment");
+    } catch {
+      console.log("something went wrong with styles");
+    }
   };
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="flex-start"
-      alignItems="center"
-      spacing={5}
-      style={{ marginTop: 70, marginBottom: 20 }}
-    >
-      <Grid item style={{ position: "absolute", top: 10 }}>
-        <Breadcrumbs crumbs={DIGITAL_STYLE_CRUMBS} />
+    <React.Fragment>
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        alignItems="center"
+        spacing={5}
+        style={{ marginTop: 70, marginBottom: 20 }}
+      >
+        <Grid item style={{ position: "absolute", top: 10 }}>
+          <Breadcrumbs crumbs={DIGITAL_STYLE_CRUMBS} />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4" style={{ color: COLOURS.red }}>
+            Make the look your own{" "}
+            <span role="img" aria-label="emoji">
+              💅
+            </span>
+          </Typography>
+        </Grid>
+        <Grid item>
+          <StyleBlock
+            nameTop={formContext.nameTop}
+            backgroundTop={backgroundTop}
+            setBackgroundTop={setBackgroundTop}
+            textTop={textTop}
+            setTextTop={setTextTop}
+            filledTop={filledTop}
+            setFilledTop={setFilledTop}
+            //
+            nameBottom={formContext.nameBottom}
+            backgroundBottom={backgroundBottom}
+            setBackgroundBottom={setBackgroundBottom}
+            textBottom={textBottom}
+            setTextBottom={setTextBottom}
+            filledBottom={filledBottom}
+            setFilledBottom={setFilledBottom}
+          />
+        </Grid>
+        <Grid item>
+          <Purchase onClick={handleClick} />
+        </Grid>
       </Grid>
-      <Grid item>
-        <Typography variant="h4" style={{ color: COLOURS.red }}>
-          Make the look your own{" "}
-          <span role="img" aria-label="emoji">
-            💅
-          </span>
-        </Typography>
-      </Grid>
-      <Grid item>
-        <StyleBlock
-          nameTop={nameTop}
-          backgroundTop={backgroundTop}
-          setBackgroundTop={setBackgroundTop}
-          textTop={textTop}
-          setTextTop={setTextTop}
-          filledTop={filledTop}
-          setFilledTop={setFilledTop}
-          //
-          nameBottom={nameBottom}
-          backgroundBottom={backgroundBottom}
-          setBackgroundBottom={setBackgroundBottom}
-          textBottom={textBottom}
-          setTextBottom={setTextBottom}
-          filledBottom={filledBottom}
-          setFilledBottom={setFilledBottom}
-        />
-      </Grid>
-      <Grid item>
-        <Purchase onClick={handleClick} />
-      </Grid>
-    </Grid>
+      <LoadingSpinner loading={loading} color={COLOURS.yellow} />
+    </React.Fragment>
   );
 };
 
