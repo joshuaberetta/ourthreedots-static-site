@@ -1,27 +1,8 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import "date-fns";
 import { useDropzone } from "react-dropzone";
-import {
-  Grid,
-  Typography,
-  Avatar,
-  TextField,
-  Button,
-  CircularProgress,
-  Backdrop,
-  Paper,
-} from "@material-ui/core";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import CreateNewFolderIcon from "@material-ui/icons/CreateNewFolder";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import { green } from "@material-ui/core/colors";
+import { Grid, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -35,56 +16,16 @@ import {
   CategoryContext,
 } from "../shared/context/form-context";
 import { useHttpClient } from "../shared/hooks/http-hook";
+
+import LoadingSpinner from "../components/LoadingSpinner";
+import Breadcrumbs from "../components/Breadcrumbs";
+import DragAndDrop from "../components/DragDrop";
+
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
+import { FORM_ITEMS } from "../shared/FormItems";
 
 const CAT = CATEGORIES.filter((cat) => cat.title === "insightful")[0];
-
-interface CrumbProps {
-  href: string;
-  title: string;
-  disabled: boolean;
-}
-
-const Crumb: React.FC<CrumbProps> = (props) => {
-  const history = useHistory();
-  return (
-    <Button
-      onClick={() => {
-        history.push(props.href);
-      }}
-      disabled={props.disabled}
-      disableRipple
-    >
-      <Typography variant="h6">{props.title}</Typography>
-    </Button>
-  );
-};
-
-const Breadcrumbs: React.FC = () => {
-  return (
-    <Grid
-      container
-      direction="row"
-      alignItems="center"
-      justify="center"
-      spacing={10}
-    >
-      <Grid item>
-        <Crumb title="🏠" href="/" disabled={false} />
-      </Grid>
-      <Grid item>
-        <Crumb title="✍️" href="/insightful" disabled={false} />
-      </Grid>
-      <Grid item>
-        <Crumb title="💰" href="/" disabled={true} />
-      </Grid>
-      <Grid item>
-        <Crumb title="🎉" href="/" disabled={true} />
-      </Grid>
-    </Grid>
-  );
-};
 
 const Header: React.FC = () => {
   return (
@@ -111,8 +52,8 @@ interface ContentProps {
   emailChange: (event: Event) => void;
   nameTopChange: (event: Event) => void;
   nameBottomChange: (event: Event) => void;
-  handleSelectedFile: (acceptedFile: any) => void;
-  acceptedFile: any;
+  handleSelectedFile: (acceptedFile: FileList) => void;
+  acceptedFile: FileList;
 }
 
 const Content: React.FC<ContentProps> = (props) => {
@@ -125,7 +66,8 @@ const Content: React.FC<ContentProps> = (props) => {
       spacing={5}
     >
       <Grid item>
-        <BasicDD
+        <DragAndDrop
+          color={CAT.color}
           handleSelectedFile={props.handleSelectedFile}
           acceptedFile={props.acceptedFile}
         />
@@ -138,31 +80,6 @@ const Content: React.FC<ContentProps> = (props) => {
         />
       </Grid>
     </Grid>
-  );
-};
-
-const DragDrop: React.FC = () => {
-  return (
-    <Button disableRipple style={{ background: "none" }}>
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        style={{
-          height: 300,
-          width: 300,
-          background: "none",
-          border: `dashed 2px ${CAT.color}`,
-          borderRadius: 10,
-        }}
-      >
-        <Grid item>
-          <Typography variant="h6" style={{ color: CAT.color }}>
-            Drop it in!
-          </Typography>
-        </Grid>
-      </Grid>
-    </Button>
   );
 };
 
@@ -194,24 +111,6 @@ const Form: React.FC<FormProps> = (props) => {
     </Grid>
   );
 };
-
-const FORM_ITEMS = [
-  {
-    avatar: "📬",
-    label: "Email",
-    background: COLOURS.yellow,
-  },
-  {
-    avatar: "👻",
-    label: "John",
-    background: COLOURS.yellow,
-  },
-  {
-    avatar: "👑",
-    label: "Jane",
-    background: COLOURS.blue,
-  },
-];
 
 interface FormItemProps {
   avatar: string;
@@ -269,11 +168,6 @@ interface DatePickersProps {
 }
 
 const DatePickers: React.FC<DatePickersProps> = (props) => {
-  // const [selectedDate, setSelectedDate] = useState(new Date());
-
-  // const handleDateChange = (date) => {
-  //   setSelectedDate(date);
-  // };
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid
@@ -286,7 +180,6 @@ const DatePickers: React.FC<DatePickersProps> = (props) => {
         <Grid item>
           <KeyboardDatePicker
             disableToolbar
-            // variant="inline"
             format="dd/MM/yyyy"
             margin="normal"
             id="date-picker-inline"
@@ -301,7 +194,6 @@ const DatePickers: React.FC<DatePickersProps> = (props) => {
         <Grid item>
           <KeyboardDatePicker
             disableToolbar
-            // variant="inline"
             format="dd/MM/yyyy"
             margin="normal"
             id="date-picker-inline"
@@ -339,72 +231,61 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
   );
 };
 
-interface LoadingSpinnerProps {
-  loading: boolean;
-  color: string;
-}
-
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
-  return (
-    <Backdrop
-      style={{ zIndex: 2, background: "rgba(255,255,255,0.7)" }}
-      open={props.loading}
-    >
-      <CircularProgress style={{ color: props.color }} />
-    </Backdrop>
-  );
-};
-
 //////////////////////
 
-const BasicDD = (props) => {
-  const onDropAccepted = useCallback((acceptedFiles) => {
-    props.handleSelectedFile(acceptedFiles[0]);
-  }, []);
+// interface DragAndDropProps {
+//   handleSelectedFile: (acceptedFile: FileList) => void;
+//   acceptedFile: FileList;
+// }
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDropAccepted,
-    accept: "image/jpg, image/jpeg, image/png, text/plain",
-    multiple: false,
-  });
+// const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
+//   const onDropAccepted = useCallback((acceptedFiles) => {
+//     props.handleSelectedFile(acceptedFiles[0]);
+//   }, []);
 
-  return (
-    <Grid container direction="column" alignItems="center" justify="center">
-      <Grid item {...getRootProps({ className: "dropzone" })}>
-        <Button disableRipple style={{ borderRadius: 10 }}>
-          <Grid
-            container
-            alignItems="center"
-            justify="center"
-            direction="column"
-            style={{
-              height: 300,
-              width: 300,
-              background: "none",
-              border: `dashed 2px ${CAT.color}`,
-              borderRadius: 10,
-            }}
-          >
-            <Grid item>
-              <input {...getInputProps()} />
-              {props.acceptedFile ? (
-                <Typography variant="h3">
-                  <span role="img" aria-label="emoji">
-                    👍
-                  </span>
-                </Typography>
-              ) : (
-                <Typography variant="h6" style={{ color: COLOURS.blue }}>
-                  DROP IT IN!
-                </Typography>
-              )}
-            </Grid>
-          </Grid>
-        </Button>
-      </Grid>
-    </Grid>
-  );
-};
+//   const { getRootProps, getInputProps } = useDropzone({
+//     onDropAccepted,
+//     accept: "image/jpg, image/jpeg, image/png, text/plain",
+//     multiple: false,
+//   });
+
+//   return (
+//     <Grid container direction="column" alignItems="center" justify="center">
+//       <Grid item {...getRootProps({ className: "dropzone" })}>
+//         <Button disableRipple style={{ borderRadius: 10 }}>
+//           <Grid
+//             container
+//             alignItems="center"
+//             justify="center"
+//             direction="column"
+//             style={{
+//               height: 300,
+//               width: 300,
+//               background: "none",
+//               border: `dashed 2px ${CAT.color}`,
+//               borderRadius: 10,
+//             }}
+//           >
+//             <Grid item>
+//               <input {...getInputProps()} />
+//               {props.acceptedFile ? (
+//                 <Typography variant="h3">
+//                   <span role="img" aria-label="emoji">
+//                     👍
+//                   </span>
+//                 </Typography>
+//               ) : (
+//                 <Typography variant="h6" style={{ color: COLOURS.blue }}>
+//                   DROP IT IN!
+//                 </Typography>
+//               )}
+//             </Grid>
+//           </Grid>
+//         </Button>
+//       </Grid>
+//     </Grid>
+//   );
+// };
 
 //////////////////////
 
@@ -424,7 +305,7 @@ const Insightful: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [acceptedFile, setAcceptedFile] = useState<any>();
 
-  const handleSelectedFile = (acceptedFile: any) => {
+  const handleSelectedFile = (acceptedFile: FileList) => {
     setAcceptedFile(acceptedFile);
   };
 
