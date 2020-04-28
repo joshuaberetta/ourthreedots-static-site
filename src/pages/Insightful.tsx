@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import "date-fns";
-import { useDropzone } from "react-dropzone";
 import { Grid, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -24,8 +23,13 @@ import DragAndDrop from "../components/DragDrop";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 import { FORM_ITEMS } from "../shared/FormItems";
+import { INSIGHTFUL_FORM_CRUMBS } from "../shared/Crumbs";
+
+////////////
 
 const CAT = CATEGORIES.filter((cat) => cat.title === "insightful")[0];
+
+////////////
 
 const Header: React.FC = () => {
   return (
@@ -231,64 +235,6 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
   );
 };
 
-//////////////////////
-
-// interface DragAndDropProps {
-//   handleSelectedFile: (acceptedFile: FileList) => void;
-//   acceptedFile: FileList;
-// }
-
-// const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
-//   const onDropAccepted = useCallback((acceptedFiles) => {
-//     props.handleSelectedFile(acceptedFiles[0]);
-//   }, []);
-
-//   const { getRootProps, getInputProps } = useDropzone({
-//     onDropAccepted,
-//     accept: "image/jpg, image/jpeg, image/png, text/plain",
-//     multiple: false,
-//   });
-
-//   return (
-//     <Grid container direction="column" alignItems="center" justify="center">
-//       <Grid item {...getRootProps({ className: "dropzone" })}>
-//         <Button disableRipple style={{ borderRadius: 10 }}>
-//           <Grid
-//             container
-//             alignItems="center"
-//             justify="center"
-//             direction="column"
-//             style={{
-//               height: 300,
-//               width: 300,
-//               background: "none",
-//               border: `dashed 2px ${CAT.color}`,
-//               borderRadius: 10,
-//             }}
-//           >
-//             <Grid item>
-//               <input {...getInputProps()} />
-//               {props.acceptedFile ? (
-//                 <Typography variant="h3">
-//                   <span role="img" aria-label="emoji">
-//                     👍
-//                   </span>
-//                 </Typography>
-//               ) : (
-//                 <Typography variant="h6" style={{ color: COLOURS.blue }}>
-//                   DROP IT IN!
-//                 </Typography>
-//               )}
-//             </Grid>
-//           </Grid>
-//         </Button>
-//       </Grid>
-//     </Grid>
-//   );
-// };
-
-//////////////////////
-
 const Insightful: React.FC = () => {
   const context = useContext(FirstFormContext);
   const locationContext = useContext(LocationContext);
@@ -301,7 +247,6 @@ const Insightful: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [nameTop, setNameTop] = useState<string>("");
   const [nameBottom, setNameBotton] = useState<string>("");
-  const [clicked, setClicked] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [acceptedFile, setAcceptedFile] = useState<any>();
 
@@ -367,7 +312,6 @@ const Insightful: React.FC = () => {
         formLoading: false,
       });
 
-      setClicked((prev: boolean) => !prev);
       history.push("/payment");
     } catch (err) {}
   };
@@ -383,7 +327,7 @@ const Insightful: React.FC = () => {
         style={{ marginTop: 70, marginBottom: 20 }}
       >
         <Grid item style={{ position: "absolute", top: 10 }}>
-          <Breadcrumbs />
+          <Breadcrumbs crumbs={INSIGHTFUL_FORM_CRUMBS} />
         </Grid>
         <Grid item>
           <Header />

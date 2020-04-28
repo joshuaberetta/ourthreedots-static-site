@@ -2,8 +2,6 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Typography, Grid } from "@material-ui/core";
 
-import { INSIGHTFUL_CRUMBS } from "../shared/Crumbs";
-
 interface CrumbProps {
   href: string;
   title: string;
@@ -25,7 +23,11 @@ const Crumb: React.FC<CrumbProps> = (props) => {
   );
 };
 
-const Breadcrumbs: React.FC = () => {
+interface BreadcrumbsProps {
+  crumbs: CrumbProps[];
+}
+
+const Breadcrumbs: React.FC<BreadcrumbsProps> = (props) => {
   return (
     <Grid
       container
@@ -34,7 +36,7 @@ const Breadcrumbs: React.FC = () => {
       justify="center"
       spacing={10}
     >
-      {INSIGHTFUL_CRUMBS.map((crumb) => (
+      {props.crumbs.map((crumb) => (
         <Grid item key={crumb.title}>
           <Crumb {...crumb} />
         </Grid>

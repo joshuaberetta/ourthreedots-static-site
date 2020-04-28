@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import { uuid } from "uuidv4";
 import {
-  FormContext,
   CategoryContext,
   FirstFormContext,
   IdContext,
@@ -98,8 +97,15 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setId(uuid());
+  }, []);
+
+  useEffect(() => {
     setLocation("/");
   }, []);
+
+  useEffect(() => {
+    console.log(location, id, category);
+  }, [location, id, category]);
 
   const updateForm = useCallback(
     (updatedItems: FormContextType) => {
@@ -126,9 +132,9 @@ const App: React.FC = () => {
     setCategory(cat);
   }, []);
 
-  useEffect(() => {
-    console.log({ id, category, form, styles });
-  }, [id, category, form, styles]);
+  // useEffect(() => {
+  //   console.log({ id, category, form, styles });
+  // }, [id, category, form, styles]);
 
   return (
     <React.Fragment>
