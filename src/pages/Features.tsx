@@ -104,27 +104,30 @@ const Middle = () => (
 
 const Features: React.FC = () => {
   return (
-    <Page background={COLOURS.red}>
-      <Grid item>
-        <Grid
-          container
-          direction="row"
-          spacing={10}
-          alignItems="flex-start"
-          justify="center"
-        >
-          <Grid item>
-            <Left />
-          </Grid>
-          <Grid item>
-            <Middle />
-          </Grid>
-          <Grid item>
-            <Right />
+    <React.Fragment>
+      {/* <div id="features" /> */}
+      <Page background={COLOURS.red} id="features">
+        <Grid item>
+          <Grid
+            container
+            direction="row"
+            spacing={10}
+            alignItems="flex-start"
+            justify="center"
+          >
+            <Grid item>
+              <Left />
+            </Grid>
+            <Grid item>
+              <Middle />
+            </Grid>
+            <Grid item>
+              <Right />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Page>
+      </Page>
+    </React.Fragment>
   );
 };
 

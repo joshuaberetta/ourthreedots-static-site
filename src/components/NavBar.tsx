@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import { HashLink as Link } from "react-router-hash-link";
 
 import { NavLinkProps } from "../models/NavLink.model";
 import { LINKS } from "../shared/Links";
@@ -38,34 +39,37 @@ const useStyles = makeStyles(() => ({
 
 const NavLink: React.FC<NavLinkProps> = (props) => {
   const classes = useStyles();
-  const history = useHistory();
+  // const history = useHistory();
 
-  const handleRedirect = () => {
-    history.push("/");
-    window.scrollTo(0, 0);
-  };
+  // const handleRedirect = () => {
+  //   history.push("/");
+  //   window.scrollTo(0, 0);
+  // };
+  // onClick={handleRedirect}
 
   return (
-    <Button disableRipple className={classes.button} onClick={handleRedirect}>
-      <Typography
-        variant="subtitle1"
-        component="span"
-        style={{ color: "black" }}
-      >
-        {props.title}
-      </Typography>
-    </Button>
+    <Link smooth to={props.href} style={{ textDecoration: "none" }}>
+      <Button disableRipple className={classes.button}>
+        <Typography
+          variant="subtitle1"
+          component="span"
+          style={{ color: "black" }}
+        >
+          {props.title}
+        </Typography>
+      </Button>
+    </Link>
   );
 };
 
 const NavBar: React.FC = () => {
   const classes = useStyles();
-  const history = useHistory();
+  // const history = useHistory();
 
-  const handleRedirect = () => {
-    history.push("/");
-    window.scrollTo(0, 0);
-  };
+  // const handleRedirect = () => {
+  //   history.push("/");
+  //   window.scrollTo(0, 0);
+  // };
 
   return (
     <React.Fragment>
@@ -84,23 +88,25 @@ const NavBar: React.FC = () => {
           alignItems="center"
         >
           <Grid item>
-            <Button
-              disableRipple
-              className={classes.logo}
-              onClick={handleRedirect}
-            >
-              <Typography variant="h4">
-                <span style={{ color: COLOURS.black }}>our</span>
-                <span style={{ color: COLOURS.blue }}>three</span>
-                <span style={{ color: COLOURS.red }}>dots</span>
-              </Typography>
-            </Button>
+            <Link smooth to="/#home" style={{ textDecoration: "none" }}>
+              <Button
+                disableRipple
+                className={classes.logo}
+                // onClick={handleRedirect}
+              >
+                <Typography variant="h4">
+                  <span style={{ color: COLOURS.black }}>our</span>
+                  <span style={{ color: COLOURS.blue }}>three</span>
+                  <span style={{ color: COLOURS.red }}>dots</span>
+                </Typography>
+              </Button>
+            </Link>
           </Grid>
           <Grid item>
             <Grid container direction="row" spacing={1}>
               {LINKS.map((link) => (
                 <Grid item key={link.title}>
-                  <NavLink title={link.title} href="" />
+                  <NavLink title={link.title} href={link.href} />
                 </Grid>
               ))}
             </Grid>

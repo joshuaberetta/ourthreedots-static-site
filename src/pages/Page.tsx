@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 interface PageProps {
   children?: any;
   background?: string;
+  id: string;
 }
 
 const Page: React.FC<PageProps> = (props) => (
@@ -17,6 +18,7 @@ const Page: React.FC<PageProps> = (props) => (
     direction="column"
     justify="space-around"
     alignItems="center"
+    id={props.id}
   >
     {props.children}
   </Grid>

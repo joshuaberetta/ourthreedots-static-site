@@ -29,24 +29,27 @@ const Words = () => {
 
 const Home: React.FC = () => {
   return (
-    <Page background={COLOURS.yellow}>
-      <Grid item>
-        <Grid
-          container
-          direction="row"
-          spacing={10}
-          alignItems="center"
-          justify="center"
-        >
-          <Grid item>
-            <Words />
-          </Grid>
-          <Grid item>
-            <WannaRing />
+    <React.Fragment>
+      {/* <div id="home" /> */}
+      <Page background={COLOURS.yellow} id="home">
+        <Grid item>
+          <Grid
+            container
+            direction="row"
+            spacing={10}
+            alignItems="center"
+            justify="center"
+          >
+            <Grid item>
+              <Words />
+            </Grid>
+            <Grid item>
+              <WannaRing />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Page>
+      </Page>
+    </React.Fragment>
   );
 };
 

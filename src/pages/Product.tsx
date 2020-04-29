@@ -27,24 +27,27 @@ const Words = () => {
 
 const Product: React.FC = () => {
   return (
-    <Page background={COLOURS.white}>
-      <Grid item>
-        <Grid
-          container
-          direction="row"
-          spacing={10}
-          alignItems="center"
-          justify="center"
-        >
-          <Grid item>
-            <WhatDo />
-          </Grid>
-          <Grid item>
-            <Words />
+    <React.Fragment>
+      {/* <div id="product" /> */}
+      <Page background={COLOURS.white} id="product">
+        <Grid item>
+          <Grid
+            container
+            direction="row"
+            spacing={10}
+            alignItems="center"
+            justify="center"
+          >
+            <Grid item>
+              <WhatDo />
+            </Grid>
+            <Grid item>
+              <Words />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Page>
+      </Page>
+    </React.Fragment>
   );
 };
 
