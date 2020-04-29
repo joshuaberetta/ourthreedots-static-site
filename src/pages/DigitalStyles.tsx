@@ -7,6 +7,7 @@ import { SwatchesPicker } from "react-color";
 import Bubble from "../components/Bubble";
 import Breadcrumbs from "../components/Breadcrumbs";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorModal from "../components/Error";
 
 import { useHttpClient } from "../shared/hooks/http-hook";
 
@@ -440,7 +441,8 @@ const DigitalStyles: React.FC = () => {
   const [filledBottom, setFilledBottom] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
-  // const [clicked, setClicked] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+
   const history = useHistory();
   const { sendRequest } = useHttpClient();
 
@@ -474,6 +476,8 @@ const DigitalStyles: React.FC = () => {
         formData,
       );
 
+      setIsError(responseData.status !== "OK");
+
       context.updateStyles({
         backgroundTop: backgroundTop ? backgroundTop.hex : COLOURS.blue,
         textTop: textTop ? textTop.hex : COLOURS.white,
@@ -488,7 +492,7 @@ const DigitalStyles: React.FC = () => {
       // setClicked((prev: boolean) => !prev);
       history.push("/payment");
     } catch {
-      console.log("something went wrong with styles");
+      setIsError(true);
     }
   };
 
@@ -536,7 +540,9 @@ const DigitalStyles: React.FC = () => {
           <Purchase onClick={handleClick} />
         </Grid>
       </Grid>
-      <LoadingSpinner loading={loading} color={COLOURS.yellow} />
+      {/* TODO */}
+      <LoadingSpinner loading={loading && !isError} color={COLOURS.red} />
+      <ErrorModal isError={isError} color={COLOURS.red} />
     </React.Fragment>
   );
 };

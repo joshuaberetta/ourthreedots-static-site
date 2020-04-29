@@ -13,8 +13,10 @@ import {
   LocationContext,
   IdContext,
 } from "../shared/context/form-context";
+
 import { useHttpClient } from "../shared/hooks/http-hook";
 
+import ErrorModal from "../components/Error";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Breadcrumbs from "../components/Breadcrumbs";
 import DragAndDrop from "../components/DragDrop";
@@ -256,7 +258,10 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
   const [email, setEmail] = useState<string>("");
   const [nameTop, setNameTop] = useState<string>("");
   const [nameBottom, setNameBotton] = useState<string>("");
+
   const [loading, setLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+
   const [acceptedFile, setAcceptedFile] = useState<any>();
   const [category, setCategory] = useState<PriceCard>({
     title: "",
@@ -326,6 +331,8 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
         formData,
       );
 
+      setIsError(responseData.status !== "OK");
+
       context.updateForm({
         email: email,
         nameTop: nameTop,
@@ -340,7 +347,9 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
       history.push(
         category.title === "insightful" ? HREFS.payment : HREFS.digitalStyles,
       );
-    } catch (err) {}
+    } catch (err) {
+      setIsError(true);
+    }
   };
 
   return (
@@ -385,7 +394,8 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
           <Next onClick={handleClick} category={category} />
         </Grid>
       </Grid>
-      <LoadingSpinner loading={loading} color={category.color} />
+      <LoadingSpinner loading={loading && !isError} color={category.color} />
+      <ErrorModal isError={isError} color={category.color} />
     </React.Fragment>
   );
 };

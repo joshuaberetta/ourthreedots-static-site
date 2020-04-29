@@ -1,34 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-import {
-  Backdrop,
-  CircularProgress,
-  Typography,
-  Grid,
-  Button,
-} from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 
+import ErrorModal from "../../components/Error";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import CardSection from "./CardSection";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { IdContext, CategoryContext } from "../../shared/context/form-context";
 import { COLOURS } from "../../shared/Colours";
-
-interface LoadingSpinnerProps {
-  loading: boolean;
-  color: string;
-}
-
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
-  return (
-    <Backdrop
-      style={{ zIndex: 2, background: "rgba(255,255,255,0.7)" }}
-      open={props.loading}
-    >
-      <CircularProgress style={{ color: props.color }} />
-    </Backdrop>
-  );
-};
+import { CATEGORIES } from "../../shared/PricingCategories";
+import { PriceCard } from "../../models/PriceCard.model";
 
 export default function CheckoutForm() {
   const idContext = useContext(IdContext);
@@ -38,6 +20,22 @@ export default function CheckoutForm() {
   const elements = useElements();
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [category, setCategory] = useState<PriceCard>({
+    title: "",
+    description: "",
+    price: "",
+    href: "",
+    background: "",
+    color: "",
+  });
+
+  useEffect(() => {
+    const CAT = CATEGORIES.filter(
+      (cat) => cat.title === categoryContext.category,
+    )[0];
+    setCategory(CAT);
+  }, []);
 
   const handleSubmit = async (event) => {
     // We don't want to let default form submission happen here,
@@ -62,11 +60,11 @@ export default function CheckoutForm() {
         formData,
       );
     } catch {
-      console.log("something went wrong");
+      setIsError(true);
     }
 
     if (!responseData) {
-      console.log("something went wrong");
+      setIsError(true);
       return;
     }
 
@@ -85,6 +83,7 @@ export default function CheckoutForm() {
     if (result.error) {
       // Show error to your customer (e.g., insufficient funds)
       console.log(result.error.message);
+      setIsError(true);
     } else {
       // The payment has been processed!
       if (result.paymentIntent!.status === "succeeded") {
@@ -95,7 +94,8 @@ export default function CheckoutForm() {
 
   return (
     <React.Fragment>
-      <LoadingSpinner loading={loading} color={COLOURS.blue} />
+      <LoadingSpinner loading={loading && !isError} color={category.color} />
+      <ErrorModal isError={isError} color={category.color} />
       <form onSubmit={handleSubmit}>
         <Grid
           container
