@@ -39,7 +39,7 @@ const MainPage: React.FC = () => {
 
 const App: React.FC = () => {
   const category = useContext(CategoryContext);
-  console.log(category.category);
+  console.log("Category: ", category.category);
 
   return (
     // <GlobalState>

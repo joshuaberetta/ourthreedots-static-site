@@ -10,6 +10,7 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import { IdContext, CategoryContext } from "../../shared/context/form-context";
 import { CATEGORIES } from "../../shared/PricingCategories";
 import { PriceCard } from "../../models/PriceCard.model";
+import { COLOURS } from "../../shared/Colours";
 
 export default function CheckoutForm() {
   const idContext = useContext(IdContext);
@@ -117,22 +118,33 @@ export default function CheckoutForm() {
             <Grid container direction="row" spacing={3}>
               <Grid item>
                 <Button
-                  variant="contained"
-                  color="secondary"
+                  style={{ border: `2px solid ${COLOURS.red}`, width: 150 }}
+                  disableRipple
+                  // disabled={props.disabled}
                   onClick={() => history.push("/")}
                   disabled={!stripe || loading}
                 >
-                  Cancel
+                  <Typography variant="h3">
+                    <span role="img" aria-label="emoji">
+                      ✋
+                    </span>
+                  </Typography>
                 </Button>
               </Grid>
               <Grid item>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  style={{ border: `2px solid ${category.color}`, width: 150 }}
+                  disableRipple
+                  // variant="contained"
+                  // color="primary"
                   type="submit"
                   disabled={!stripe || loading}
                 >
-                  Confirm order
+                  <Typography variant="h3">
+                    <span role="img" aria-label="emoji">
+                      🎉
+                    </span>
+                  </Typography>
                 </Button>
               </Grid>
             </Grid>
