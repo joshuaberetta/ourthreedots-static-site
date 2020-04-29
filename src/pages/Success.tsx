@@ -33,6 +33,14 @@ const Payment: React.FC = () => {
           </span>
         </Typography>
       </Grid>
+      <Grid item>
+        <Typography variant="h6">
+          Please check your email for order confirmation{" "}
+          <span role="img" aria-label="e">
+            💌
+          </span>
+        </Typography>
+      </Grid>
     </Grid>
   );
 };

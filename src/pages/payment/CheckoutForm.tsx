@@ -8,7 +8,6 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import CardSection from "./CardSection";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { IdContext, CategoryContext } from "../../shared/context/form-context";
-import { COLOURS } from "../../shared/Colours";
 import { CATEGORIES } from "../../shared/PricingCategories";
 import { PriceCard } from "../../models/PriceCard.model";
 
