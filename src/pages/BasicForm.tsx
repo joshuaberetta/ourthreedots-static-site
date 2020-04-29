@@ -217,6 +217,7 @@ const DatePickers: React.FC<DatePickersProps> = (props) => {
 
 interface NextProps {
   category: PriceCard;
+  disabled: boolean;
   onClick: (event: any) => void;
 }
 
@@ -232,6 +233,7 @@ const Next: React.FC<NextProps> = (props) => {
       variant="outlined"
       style={{ border: `2px solid ${props.category.color}`, width: 300 }}
       disableRipple
+      disabled={props.disabled}
       onClick={props.onClick}
     >
       <Typography variant="h3">
@@ -241,6 +243,13 @@ const Next: React.FC<NextProps> = (props) => {
       </Typography>
     </Button>
   );
+};
+
+// Simple email validation -- do not use!
+const checkEmail = (email: string) => {
+  return RegExp(
+    "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
+  ).test(email);
 };
 
 interface BasicFormProps {
@@ -261,6 +270,7 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(false);
 
   const [acceptedFile, setAcceptedFile] = useState<any>();
   const [category, setCategory] = useState<PriceCard>({
@@ -273,15 +283,20 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
   });
 
   useEffect(() => {
-    // const url = window.location.href;
-    // const loc = getLocation(url);
-    // const loc = "digital";
-
     locationContext.updateLocation(`/${props.category}`);
 
     const CAT = CATEGORIES.filter((cat) => cat.title === props.category)[0];
     setCategory(CAT);
   }, []);
+
+  // very simple form validation
+  useEffect(() => {
+    if (email && checkEmail(email) && nameTop && nameBottom && acceptedFile) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [email, nameTop, nameBottom, acceptedFile]);
 
   const handleSelectedFile = (acceptedFile: FileList) => {
     setAcceptedFile(acceptedFile);
@@ -391,7 +406,7 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
           />
         </Grid>
         <Grid item>
-          <Next onClick={handleClick} category={category} />
+          <Next onClick={handleClick} category={category} disabled={!isValid} />
         </Grid>
       </Grid>
       <LoadingSpinner loading={loading && !isError} color={category.color} />

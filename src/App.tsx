@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -22,6 +22,7 @@ import Payment from "./pages/Payment";
 import Success from "./pages/Success";
 
 import { HREFS } from "./shared/Hrefs";
+import { CategoryContext } from "./shared/context/form-context";
 
 const MainPage: React.FC = () => {
   return (
@@ -37,39 +38,48 @@ const MainPage: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const category = useContext(CategoryContext);
+  console.log(category.category);
+
   return (
-    <GlobalState>
-      <Router>
-        <Switch>
-          <Route path={HREFS.home} exact>
-            <NavBar />
-            <MainPage />
-          </Route>
-          {/* <Route path={"/form"} exact>
+    // <GlobalState>
+    <Router>
+      <Switch>
+        <Route path={HREFS.home} exact>
+          <NavBar />
+          <MainPage />
+        </Route>
+        {/* <Route path={"/form"} exact>
             <Form />
           </Route> */}
-          <Route path={HREFS.insightful} exact>
-            <BasicForm category={"insightful"} />
-          </Route>
-          <Route path={HREFS.digitalForm} exact>
-            <BasicForm category={"digital"} />
-          </Route>
+        <Route path={HREFS.insightful} exact>
+          <BasicForm category={"insightful"} />
+        </Route>
+        <Route path={HREFS.digitalForm} exact>
+          <BasicForm category={"digital"} />
+        </Route>
+        {category.category && (
           <Route path={HREFS.digitalStyles} exact>
             <DigitalStyles />
           </Route>
-          <Route path={HREFS.book} exact>
-            <Book />
-          </Route>
+        )}
+        <Route path={HREFS.book} exact>
+          <Book />
+        </Route>
+        {category.category && (
           <Route path={HREFS.payment} exact>
             <Payment />
           </Route>
+        )}
+        {category.category && (
           <Route path={HREFS.success} exact>
             <Success />
           </Route>
-          <Redirect to={HREFS.home} />
-        </Switch>
-      </Router>
-    </GlobalState>
+        )}
+        <Redirect to={HREFS.home} />
+      </Switch>
+    </Router>
+    // </GlobalState>
   );
 };
 
