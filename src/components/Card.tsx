@@ -13,9 +13,9 @@ const useStyles = makeStyles(() => ({
   button1: {
     borderWidth: BOX.borderWidth,
     width: 150,
-    "&:hover, &$focusVisible": {
-      // background: "none",
-    },
+    // "&:hover, &$focusVisible": {
+    //   // background: "none",
+    // },
   },
 }));
 

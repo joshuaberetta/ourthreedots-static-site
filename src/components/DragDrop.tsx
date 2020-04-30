@@ -9,9 +9,12 @@ interface DragAndDropProps {
 }
 
 const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
-  const onDropAccepted = useCallback((acceptedFiles) => {
-    props.handleSelectedFile(acceptedFiles[0]);
-  }, []);
+  const onDropAccepted = useCallback(
+    (acceptedFiles) => {
+      props.handleSelectedFile(acceptedFiles[0]);
+    },
+    [props],
+  );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDropAccepted,

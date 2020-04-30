@@ -19,11 +19,11 @@ const useStyles = makeStyles(() => ({
     textTransform: "none",
     width: "100px",
     fontWeight: "bold",
-    "&:hover, &$focusVisible": {
-      "& $imageBackdrop": {
-        opacity: 0.15,
-      },
-    },
+    // "&:hover, &$focusVisible": {
+    //   "& $imageBackdrop": {
+    //     opacity: 0.15,
+    //   },
+    // },
   },
   logo: {
     position: "relative",
@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
     textTransform: "none",
     // background: "white",
     // width: "500px",
-    "&:hover, &$focusVisible": {
+    "&:hover": {
       background: "white",
     },
   },
@@ -113,7 +113,7 @@ const NavBar: React.FC = () => {
           </Grid>
         </Grid>
       </AppBar>
-      <div style={{ height: "4rem" }} />
+      {/* <div style={{ height: "4rem" }} /> */}
     </React.Fragment>
   );
 };

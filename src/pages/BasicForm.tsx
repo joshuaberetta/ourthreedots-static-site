@@ -102,7 +102,7 @@ const Form: React.FC<FormProps> = (props) => {
       spacing={4}
     >
       {FORM_ITEMS.map((item) => (
-        <Grid item>
+        <Grid item key={item.label}>
           <FormItem
             category={props.category}
             {...item}
@@ -187,7 +187,7 @@ const DatePickers: React.FC<DatePickersProps> = (props) => {
             disableToolbar
             format="dd/MM/yyyy"
             margin="normal"
-            id="date-picker-inline"
+            id="start-date-picker-inline"
             label="Start date"
             value={props.start.value}
             onChange={props.start.cb}
@@ -201,7 +201,7 @@ const DatePickers: React.FC<DatePickersProps> = (props) => {
             disableToolbar
             format="dd/MM/yyyy"
             margin="normal"
-            id="date-picker-inline"
+            id="end-date-picker-inline"
             label="End date"
             value={props.end.value}
             onChange={props.end.cb}
@@ -287,7 +287,7 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
 
     const CAT = CATEGORIES.filter((cat) => cat.title === props.category)[0];
     setCategory(CAT);
-  }, []);
+  }, [props.category, locationContext]);
 
   // very simple form validation
   useEffect(() => {

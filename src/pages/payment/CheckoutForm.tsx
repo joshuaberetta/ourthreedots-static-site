@@ -35,7 +35,7 @@ export default function CheckoutForm() {
       (cat) => cat.title === categoryContext.category,
     )[0];
     setCategory(CAT);
-  }, []);
+  }, [categoryContext]);
 
   const handleSubmit = async (event) => {
     // We don't want to let default form submission happen here,

@@ -8,20 +8,25 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = (props) => (
-  <Grid
-    container
-    style={{
-      minHeight: "45rem",
-      background: props.background || "white",
-      width: "100%",
-    }}
-    direction="column"
-    justify="space-around"
-    alignItems="center"
-    id={props.id}
-  >
-    {props.children}
-  </Grid>
+  <React.Fragment>
+    <div style={{ paddingTop: "2rem" }} id={props.id} />
+    <Grid
+      container
+      style={{
+        minHeight: "50rem",
+        background: props.background || "white",
+        // width: "100%",
+        // margin: 0,
+        // padding: 0,
+      }}
+      direction="column"
+      justify="space-around"
+      alignItems="center"
+      // id={props.id}
+    >
+      {props.children}
+    </Grid>
+  </React.Fragment>
 );
 
 export default Page;

@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import "date-fns";
 import { Grid, Typography, IconButton, Paper, Button } from "@material-ui/core";
 import { SwatchesPicker } from "react-color";
 
@@ -294,7 +293,7 @@ const Messages: React.FC<MessagesProps> = (props) => {
       {CONTENT.map((message) => {
         if (message.side === "left") {
           return (
-            <Grid item>
+            <Grid item key={message.msg}>
               <Bubble
                 {...message}
                 background={
@@ -317,7 +316,7 @@ const Messages: React.FC<MessagesProps> = (props) => {
           );
         } else {
           return (
-            <Grid item>
+            <Grid item key={message.msg}>
               <Bubble
                 {...message}
                 background={
