@@ -13,39 +13,34 @@ import { LINKS } from "../shared/Links";
 import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles(() => ({
+  bar: {
+    minHeight: "4rem",
+    width: "100%",
+    paddingRight: "4rem",
+    paddingLeft: "4rem",
+  },
   button: {
     position: "relative",
     height: "4rem",
     textTransform: "none",
     width: "100px",
     fontWeight: "bold",
-    // "&:hover, &$focusVisible": {
-    //   "& $imageBackdrop": {
-    //     opacity: 0.15,
-    //   },
-    // },
   },
   logo: {
     position: "relative",
     height: "4rem",
     textTransform: "none",
-    // background: "white",
-    // width: "500px",
     "&:hover": {
       background: "white",
     },
+  },
+  link: {
+    color: "black",
   },
 }));
 
 const NavLink: React.FC<NavLinkProps> = (props) => {
   const classes = useStyles();
-  // const history = useHistory();
-
-  // const handleRedirect = () => {
-  //   history.push("/");
-  //   window.scrollTo(0, 0);
-  // };
-  // onClick={handleRedirect}
 
   return (
     <Link smooth to={props.href} style={{ textDecoration: "none" }}>
@@ -53,7 +48,7 @@ const NavLink: React.FC<NavLinkProps> = (props) => {
         <Typography
           variant="subtitle1"
           component="span"
-          style={{ color: "black" }}
+          className={classes.link}
         >
           {props.title}
         </Typography>
@@ -64,12 +59,6 @@ const NavLink: React.FC<NavLinkProps> = (props) => {
 
 const NavBar: React.FC = () => {
   const classes = useStyles();
-  // const history = useHistory();
-
-  // const handleRedirect = () => {
-  //   history.push("/");
-  //   window.scrollTo(0, 0);
-  // };
 
   return (
     <React.Fragment>
@@ -77,23 +66,13 @@ const NavBar: React.FC = () => {
         <Grid
           container
           direction="row"
-          style={{
-            minHeight: "4rem",
-            width: "100%",
-            //   boxShadow: "0px 3px 20px 5px #ccc",
-            paddingRight: "4rem",
-            paddingLeft: "4rem",
-          }}
+          className={classes.bar}
           justify="space-between"
           alignItems="center"
         >
           <Grid item>
             <Link smooth to="/#home" style={{ textDecoration: "none" }}>
-              <Button
-                disableRipple
-                className={classes.logo}
-                // onClick={handleRedirect}
-              >
+              <Button disableRipple className={classes.logo}>
                 <Typography variant="h4">
                   <span style={{ color: COLOURS.black }}>our</span>
                   <span style={{ color: COLOURS.blue }}>three</span>
@@ -113,7 +92,6 @@ const NavBar: React.FC = () => {
           </Grid>
         </Grid>
       </AppBar>
-      {/* <div style={{ height: "4rem" }} /> */}
     </React.Fragment>
   );
 };

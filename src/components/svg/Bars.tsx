@@ -1,7 +1,16 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 import { COLOURS } from "../../shared/Colours";
+
+const useStyles = makeStyles({
+  root: {
+    background: (props: BarProps) => props.color,
+    height: (props: BarProps) => props.height,
+    width: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+});
 
 interface BarProps {
   emoji: string;
@@ -43,18 +52,11 @@ const BARS: BarProps[] = [
 ];
 
 const Bar: React.FC<BarProps> = (props) => {
+  const classes = useStyles(props);
+
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Grid
-        item
-        style={{
-          background: props.color,
-          height: props.height,
-          width: 10,
-          borderRadius: 5,
-          marginBottom: 10,
-        }}
-      />
+      <Grid item className={classes.root} />
       <Grid item>
         <Typography variant="h6">
           <span role="img" aria-label="emoji">

@@ -1,6 +1,33 @@
 import React from "react";
-import { Grid, Backdrop, Typography, Button } from "@material-ui/core";
+import {
+  Grid,
+  Backdrop,
+  Typography,
+  Button,
+  makeStyles,
+} from "@material-ui/core";
 import { COLOURS } from "../shared/Colours";
+
+const useStyles = makeStyles({
+  backdrop: {
+    zIndex: 2,
+    background: "rgba(255,255,255,0.7)",
+  },
+  container: {
+    width: 400,
+    height: 300,
+    background: COLOURS.white,
+    border: (props: ErrorModalProps) => `2px solid ${props.color}`,
+    borderRadius: 10,
+  },
+  text: {
+    color: (props: ErrorModalProps) => props.color,
+  },
+  button: {
+    border: (props: ErrorModalProps) => `2px solid ${props.color}`,
+    width: 100,
+  },
+});
 
 interface ErrorModalProps {
   isError: boolean;
@@ -8,27 +35,20 @@ interface ErrorModalProps {
 }
 
 const ErrorModal: React.FC<ErrorModalProps> = (props) => {
+  const classes = useStyles(props);
+
   return (
-    <Backdrop
-      style={{ zIndex: 2, background: "rgba(255,255,255,0.7)" }}
-      open={props.isError}
-    >
+    <Backdrop className={classes.backdrop} open={props.isError}>
       <Grid
         container
         direction="column"
         justify="center"
         alignItems="center"
         spacing={5}
-        style={{
-          width: 400,
-          height: 300,
-          background: COLOURS.white,
-          border: `2px solid ${props.color}`,
-          borderRadius: 10,
-        }}
+        className={classes.container}
       >
         <Grid item>
-          <Typography variant="h5" style={{ color: props.color }}>
+          <Typography variant="h5" className={classes.text}>
             Something went wrong{" "}
             <span role="img" aria-label="emoji">
               😢
@@ -39,7 +59,7 @@ const ErrorModal: React.FC<ErrorModalProps> = (props) => {
           <Button
             href="/"
             variant="outlined"
-            style={{ border: `2px solid ${props.color}`, width: 100 }}
+            className={classes.button}
             disableRipple
           >
             <Typography variant="h4">

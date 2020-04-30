@@ -9,19 +9,36 @@ import { CategoryContext } from "../shared/context/form-context";
 import { PriceCard } from "../models/PriceCard.model";
 import { BOX } from "../shared/Themes";
 
-const useStyles = makeStyles(() => ({
-  button1: {
-    borderWidth: BOX.borderWidth,
-    width: 150,
-    // "&:hover, &$focusVisible": {
-    //   // background: "none",
-    // },
+const useStyles = makeStyles({
+  root: {
+    height: "400px",
+    width: "320px",
+    borderRadius: 10,
+    background: (props: PriceCard) => props.background,
+    padding: 30,
   },
-}));
+  title: {
+    color: (props: PriceCard) => props.color,
+  },
+  description: {
+    background: "white",
+    textAlign: "center",
+    padding: 15,
+    minHeight: "150px",
+  },
+  button: {
+    borderWidth: BOX.borderWidth,
+    borderColor: (props: PriceCard) => props.color,
+    width: 150,
+  },
+  buttonText: {
+    color: (props: PriceCard) => props.color,
+  },
+});
 
 const Card: React.FC<PriceCard> = (props) => {
   const context = useContext(CategoryContext);
-  const classes = useStyles();
+  const classes = useStyles(props);
   const history = useHistory();
 
   const handleClick = () => {
@@ -36,13 +53,7 @@ const Card: React.FC<PriceCard> = (props) => {
       direction="column"
       justify="space-around"
       alignItems="center"
-      style={{
-        height: "400px",
-        width: "320px",
-        borderRadius: 10,
-        background: props.background,
-        padding: 30,
-      }}
+      className={classes.root}
     >
       <Grid item>
         <Typography variant="h5" style={{ color: props.color }}>
@@ -54,12 +65,7 @@ const Card: React.FC<PriceCard> = (props) => {
           container
           justify="center"
           alignItems="center"
-          style={{
-            background: "white",
-            textAlign: "center",
-            padding: 15,
-            minHeight: "150px",
-          }}
+          className={classes.description}
         >
           <Grid item>
             <Typography>{props.description}</Typography>
@@ -68,17 +74,13 @@ const Card: React.FC<PriceCard> = (props) => {
       </Grid>
       <Grid item>
         <Button
-          className={classes.button1}
+          className={classes.button}
           onClick={handleClick}
           disableRipple
           variant="outlined"
           size="large"
-          style={{
-            borderColor: props.color,
-            // borderWidth: BOX.borderWidth,
-          }}
         >
-          <Typography variant="body1" style={{ color: props.color }}>
+          <Typography variant="body1" className={classes.buttonText}>
             {props.price}
           </Typography>
         </Button>

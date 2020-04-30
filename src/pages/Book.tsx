@@ -1,10 +1,42 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Grid, Typography, TextField, Button } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  makeStyles,
+} from "@material-ui/core";
 import { COLOURS } from "../shared/Colours";
+
+import Breadcrumbs from "../components/Breadcrumbs";
+
+import { SUCCESS_CRUMBS } from "../shared/Crumbs";
+
+const useStyles = makeStyles({
+  root: {
+    marginTop: 70,
+    height: "40rem",
+  },
+  body: {
+    maxWidth: "30rem",
+  },
+  textField: {
+    width: "30rem",
+  },
+  button: {
+    border: `2px solid ${COLOURS.yellow}`,
+    width: 300,
+  },
+  crumbs: {
+    position: "absolute",
+    top: 10,
+  },
+});
 
 const Book: React.FC = () => {
   const history = useHistory();
+  const classes = useStyles();
 
   const handleClick = () => {
     history.push("/");
@@ -17,8 +49,11 @@ const Book: React.FC = () => {
       alignItems="center"
       justify="center"
       spacing={5}
-      style={{ height: "40rem" }}
+      className={classes.root}
     >
+      <Grid item className={classes.crumbs}>
+        <Breadcrumbs crumbs={SUCCESS_CRUMBS} />
+      </Grid>
       <Grid item>
         <Typography variant="h4">
           Oh dear{" "}
@@ -27,7 +62,7 @@ const Book: React.FC = () => {
           </span>
         </Typography>
       </Grid>
-      <Grid item style={{ maxWidth: "30rem" }}>
+      <Grid item className={classes.body}>
         <Typography>
           This feature is not available yet and will be based on popular demand.
           If this is something that you would like, please leave your email
@@ -39,13 +74,13 @@ const Book: React.FC = () => {
           id="outlined-basic"
           label="email"
           variant="outlined"
-          style={{ width: "30rem" }}
+          className={classes.textField}
         />
       </Grid>
       <Grid item>
         <Button
           variant="outlined"
-          style={{ border: `2px solid ${COLOURS.yellow}`, width: 300 }}
+          className={classes.button}
           disableRipple
           onClick={handleClick}
         >

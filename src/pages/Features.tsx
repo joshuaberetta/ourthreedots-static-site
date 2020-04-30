@@ -13,7 +13,6 @@ const Left = () => (
     container
     direction="column"
     alignItems="center"
-    // style={{ height: "30rem" }}
     justify="flex-start"
     spacing={5}
   >
@@ -31,7 +30,6 @@ const Right = () => (
     container
     direction="column"
     alignItems="center"
-    // style={{ height: "30rem" }}
     justify="flex-start"
     spacing={5}
   >
@@ -83,7 +81,6 @@ const Middle = () => (
     container
     direction="column"
     alignItems="center"
-    // style={{ height: "30rem" }}
     justify="flex-start"
     spacing={5}
   >

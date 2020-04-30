@@ -1,6 +1,22 @@
 import React, { useCallback } from "react";
-import { Grid, Button, Typography } from "@material-ui/core";
+import { Grid, Button, Typography, makeStyles } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
+
+const useStyles = makeStyles({
+  container: {
+    height: 300,
+    width: 300,
+    background: "none",
+    border: (props: DragAndDropProps) => `dashed 2px ${props.color}`,
+    borderRadius: 10,
+  },
+  button: {
+    borderRadius: 10,
+  },
+  text: {
+    color: (props: DragAndDropProps) => props.color,
+  },
+});
 
 interface DragAndDropProps {
   color: string;
@@ -9,6 +25,8 @@ interface DragAndDropProps {
 }
 
 const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
+  const classes = useStyles(props);
+
   const onDropAccepted = useCallback(
     (acceptedFiles) => {
       props.handleSelectedFile(acceptedFiles[0]);
@@ -25,19 +43,13 @@ const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
   return (
     <Grid container direction="column" alignItems="center" justify="center">
       <Grid item {...getRootProps({ className: "dropzone" })}>
-        <Button disableRipple style={{ borderRadius: 10 }}>
+        <Button disableRipple className={classes.button}>
           <Grid
             container
             alignItems="center"
             justify="center"
             direction="column"
-            style={{
-              height: 300,
-              width: 300,
-              background: "none",
-              border: `dashed 2px ${props.color}`,
-              borderRadius: 10,
-            }}
+            className={classes.container}
           >
             <Grid item>
               <input {...getInputProps()} />
@@ -48,7 +60,7 @@ const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
                   </span>
                 </Typography>
               ) : (
-                <Typography variant="h6" style={{ color: props.color }}>
+                <Typography variant="h6" className={classes.text}>
                   DROP IT IN!
                 </Typography>
               )}

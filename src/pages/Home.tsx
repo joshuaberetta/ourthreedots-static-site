@@ -1,14 +1,21 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
 import WannaRing from "../components/WannaRing";
 import { COLOURS } from "../shared/Colours";
 
+const useStyles = makeStyles({
+  words: {
+    width: 300,
+  },
+});
+
 const Words = () => {
+  const classes = useStyles();
+
   return (
-    <Grid container direction="column" spacing={2} style={{ width: 300 }}>
+    <Grid container direction="column" spacing={2} className={classes.words}>
       <Grid item>
         <Typography variant="h4">
           Digital memories, brought to life{" "}
@@ -30,7 +37,6 @@ const Words = () => {
 const Home: React.FC = () => {
   return (
     <React.Fragment>
-      {/* <div id="home" /> */}
       <Page background={COLOURS.yellow} id="home">
         <Grid item>
           <Grid

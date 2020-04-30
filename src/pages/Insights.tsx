@@ -1,6 +1,5 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import { Grid, Typography } from "@material-ui/core";
 
 import Page from "./Page";
 import { COLOURS } from "../shared/Colours";
@@ -11,7 +10,6 @@ import Bubbles from "../components/svg/Bubbles";
 const Product: React.FC = () => {
   return (
     <React.Fragment>
-      {/* <div id="insights" /> */}
       <Page background={COLOURS.white} id="insights">
         <Grid
           container

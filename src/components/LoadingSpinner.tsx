@@ -1,5 +1,15 @@
 import React from "react";
-import { Backdrop, CircularProgress } from "@material-ui/core";
+import { Backdrop, CircularProgress, makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles({
+  backdrop: {
+    zIndex: 2,
+    background: "rgba(255,255,255,0.7)",
+  },
+  spinner: {
+    color: (props: LoadingSpinnerProps) => props.color,
+  },
+});
 
 interface LoadingSpinnerProps {
   loading: boolean;
@@ -7,12 +17,10 @@ interface LoadingSpinnerProps {
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
+  const classes = useStyles(props);
   return (
-    <Backdrop
-      style={{ zIndex: 2, background: "rgba(255,255,255,0.7)" }}
-      open={props.loading}
-    >
-      <CircularProgress style={{ color: props.color }} />
+    <Backdrop className={classes.backdrop} open={props.loading}>
+      <CircularProgress className={classes.spinner} />
     </Backdrop>
   );
 };

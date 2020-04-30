@@ -1,14 +1,21 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
 import WhatDo from "../components/WhatDo";
 import { COLOURS } from "../shared/Colours";
 
+const useStyles = makeStyles({
+  root: {
+    width: 300,
+  },
+});
+
 const Words = () => {
+  const classes = useStyles();
+
   return (
-    <Grid container direction="column" spacing={2} style={{ width: 300 }}>
+    <Grid container direction="column" spacing={2} className={classes.root}>
       <Grid item>
         <Typography variant="h4">
           Your{" "}
@@ -28,7 +35,6 @@ const Words = () => {
 const Product: React.FC = () => {
   return (
     <React.Fragment>
-      {/* <div id="product" /> */}
       <Page background={COLOURS.white} id="product">
         <Grid item>
           <Grid

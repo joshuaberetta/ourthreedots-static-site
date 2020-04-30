@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-import { Typography, Grid, Button } from "@material-ui/core";
+import { Typography, Grid, Button, makeStyles } from "@material-ui/core";
 
 import ErrorModal from "../../components/Error";
 import LoadingSpinner from "../../components/LoadingSpinner";
@@ -12,7 +12,18 @@ import { CATEGORIES } from "../../shared/PricingCategories";
 import { PriceCard } from "../../models/PriceCard.model";
 import { COLOURS } from "../../shared/Colours";
 
-export default function CheckoutForm() {
+const useStyles = makeStyles({
+  buttonCancel: {
+    border: `2px solid ${COLOURS.red}`,
+    width: 150,
+  },
+  buttonProceed: {
+    border: (props: { color: string }) => `2px solid ${props.color}`,
+    width: 150,
+  },
+});
+
+const CheckoutForm = () => {
   const idContext = useContext(IdContext);
   const categoryContext = useContext(CategoryContext);
   const { sendRequest } = useHttpClient();
@@ -30,6 +41,8 @@ export default function CheckoutForm() {
     color: "",
   });
 
+  const classes = useStyles({ color: category.color });
+
   useEffect(() => {
     const CAT = CATEGORIES.filter(
       (cat) => cat.title === categoryContext.category,
@@ -38,13 +51,9 @@ export default function CheckoutForm() {
   }, [categoryContext]);
 
   const handleSubmit = async (event) => {
-    // We don't want to let default form submission happen here,
-    // which would refresh the page.
     event.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
@@ -76,9 +85,6 @@ export default function CheckoutForm() {
         },
       },
     });
-
-    // testing out shared state
-    // console.log(context);
 
     if (result.error) {
       // Show error to your customer (e.g., insufficient funds)
@@ -118,11 +124,10 @@ export default function CheckoutForm() {
             <Grid container direction="row" spacing={3}>
               <Grid item>
                 <Button
-                  style={{ border: `2px solid ${COLOURS.red}`, width: 150 }}
+                  className={classes.buttonCancel}
                   disableRipple
-                  // disabled={props.disabled}
                   onClick={() => history.push("/")}
-                  disabled={!stripe || loading}
+                  disabled={!stripe || !elements || loading}
                 >
                   <Typography variant="h3">
                     <span role="img" aria-label="emoji">
@@ -133,12 +138,10 @@ export default function CheckoutForm() {
               </Grid>
               <Grid item>
                 <Button
-                  style={{ border: `2px solid ${category.color}`, width: 150 }}
+                  className={classes.buttonProceed}
                   disableRipple
-                  // variant="contained"
-                  // color="primary"
                   type="submit"
-                  disabled={!stripe || loading}
+                  disabled={!stripe || !elements || loading}
                 >
                   <Typography variant="h3">
                     <span role="img" aria-label="emoji">
@@ -153,4 +156,6 @@ export default function CheckoutForm() {
       </form>
     </React.Fragment>
   );
-}
+};
+
+export default CheckoutForm;

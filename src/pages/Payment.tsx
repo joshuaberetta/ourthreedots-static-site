@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
 
 import {
   LocationContext,
@@ -16,10 +16,23 @@ import {
 } from "../shared/Crumbs";
 import { COLOURS } from "../shared/Colours";
 
+const useStyles = makeStyles({
+  root: {
+    marginTop: 70,
+    minHeight: "40rem",
+  },
+  crumbs: {
+    position: "absolute",
+    top: 10,
+  },
+});
+
 const Payment: React.FC = (props) => {
   const locationContext = useContext(LocationContext);
   const categoryContext = useContext(CategoryContext);
   const [isError, setIsError] = useState<boolean>(false);
+
+  const classes = useStyles();
 
   let crumbs;
   switch (categoryContext.category) {
@@ -49,10 +62,10 @@ const Payment: React.FC = (props) => {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ marginTop: 70, minHeight: "40rem" }}
+        className={classes.root}
         spacing={5}
       >
-        <Grid item style={{ position: "absolute", top: 10 }}>
+        <Grid item className={classes.crumbs}>
           <Breadcrumbs crumbs={crumbs} />
         </Grid>
         <Grid item>
