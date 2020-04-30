@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import "date-fns";
-import { Grid, Typography, Avatar, TextField, Button } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Avatar,
+  TextField,
+  Button,
+  withStyles,
+} from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -26,6 +33,7 @@ import { CATEGORIES } from "../shared/PricingCategories";
 import { FORM_ITEMS } from "../shared/FormItems";
 import { INSIGHTFUL_FORM_CRUMBS, DIGITAL_FORM_CRUMBS } from "../shared/Crumbs";
 import { HREFS } from "../shared/Hrefs";
+import * as STYLES from "../shared/Styles";
 
 const Header: React.FC<PriceCard> = (props) => {
   return (
@@ -127,6 +135,13 @@ interface FormItemProps {
 }
 
 const FormItem: React.FC<FormItemProps> = (props) => {
+  let styles = STYLES.INSIGHTFUL_STYLES;
+  if (props.category.title === "digital") {
+    styles = STYLES.DIGITAL_STYLES;
+  }
+
+  const CustomTextField = withStyles(styles)(TextField);
+
   let cb;
   if (props.label === "Email") {
     cb = props.emailChange;
@@ -150,11 +165,12 @@ const FormItem: React.FC<FormItemProps> = (props) => {
         </Avatar>
       </Grid>
       <Grid item>
-        <TextField
-          label={props.label}
+        <CustomTextField
+          placeholder={props.label}
           variant="outlined"
           style={{ width: 300 }}
           onChange={cb}
+          required={true}
         />
       </Grid>
     </Grid>
@@ -173,6 +189,10 @@ interface DatePickersProps {
 }
 
 const DatePickers: React.FC<DatePickersProps> = (props) => {
+  let styles = STYLES.INSIGHTFUL_STYLES;
+
+  const CustomKeyboardDatePicker = withStyles(styles)(KeyboardDatePicker);
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Grid
@@ -183,7 +203,7 @@ const DatePickers: React.FC<DatePickersProps> = (props) => {
         spacing={5}
       >
         <Grid item>
-          <KeyboardDatePicker
+          <CustomKeyboardDatePicker
             disableToolbar
             format="dd/MM/yyyy"
             margin="normal"
@@ -197,7 +217,7 @@ const DatePickers: React.FC<DatePickersProps> = (props) => {
           />
         </Grid>
         <Grid item>
-          <KeyboardDatePicker
+          <CustomKeyboardDatePicker
             disableToolbar
             format="dd/MM/yyyy"
             margin="normal"
