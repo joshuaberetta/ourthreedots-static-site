@@ -1,12 +1,16 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { Avatar } from "@material-ui/core";
+import { Grid, Typography, Avatar, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
 import { COLOURS } from "../shared/Colours";
 import Look from "../components/svg/Look";
 import Dates from "../components/svg/Dates";
+
+const useStyles = makeStyles({
+  root: {
+    padding: 20,
+  },
+});
 
 const Left = () => (
   <Grid
@@ -100,6 +104,8 @@ const Middle = () => (
 );
 
 const Features: React.FC = () => {
+  const classes = useStyles();
+
   return (
     <React.Fragment>
       {/* <div id="features" /> */}
@@ -111,6 +117,7 @@ const Features: React.FC = () => {
             spacing={10}
             alignItems="flex-start"
             justify="center"
+            className={classes.root}
           >
             <Grid item>
               <Left />

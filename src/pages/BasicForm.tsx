@@ -8,6 +8,8 @@ import {
   TextField,
   Button,
   withStyles,
+  IconButton,
+  Tooltip,
 } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -50,7 +52,9 @@ const Header: React.FC<PriceCard> = (props) => {
         </Typography>
       </Grid>
       <Grid item>
-        <Typography variant="h5">{props.description}</Typography>
+        <Typography variant="h5" style={{ textAlign: "center" }}>
+          {props.description}
+        </Typography>
       </Grid>
     </Grid>
   );
@@ -135,12 +139,14 @@ interface FormItemProps {
 }
 
 const FormItem: React.FC<FormItemProps> = (props) => {
-  let styles = STYLES.INSIGHTFUL_STYLES;
-  if (props.category.title === "digital") {
-    styles = STYLES.DIGITAL_STYLES;
-  }
+  // let styles = STYLES.INSIGHTFUL_STYLES;
+  // if (props.category.title === "digital") {
+  //   styles = STYLES.DIGITAL_STYLES;
+  // }
+  // const useStyles = makeStyles(styles);
+  // const classes = useStyles();
 
-  const CustomTextField = withStyles(styles)(TextField);
+  // const CustomTextField = withStyles(styles)(TextField);
 
   let cb;
   if (props.label === "Email") {
@@ -160,17 +166,30 @@ const FormItem: React.FC<FormItemProps> = (props) => {
       spacing={5}
     >
       <Grid item>
-        <Avatar style={{ background: props.background, width: 50, height: 50 }}>
-          <Typography variant="h4">{props.avatar}</Typography>
-        </Avatar>
+        <Tooltip title="Add an image">
+          <IconButton
+            disableRipple
+            style={{ padding: 5 }}
+            disabled={props.label === "Email"}
+          >
+            <Avatar
+              style={{ background: props.background, width: 50, height: 50 }}
+            >
+              <Typography variant="h4">{props.avatar}</Typography>
+            </Avatar>
+          </IconButton>
+        </Tooltip>
       </Grid>
       <Grid item>
-        <CustomTextField
+        <TextField
           placeholder={props.label}
           variant="outlined"
           style={{ width: 300 }}
           onChange={cb}
           required={true}
+          // noValidate
+          autoComplete="off"
+          // InputProps={classes}
         />
       </Grid>
     </Grid>
@@ -249,19 +268,23 @@ const Next: React.FC<NextProps> = (props) => {
     buttonText = "💅 💅 💅";
   }
   return (
-    <Button
-      variant="outlined"
-      style={{ border: `2px solid ${props.category.color}`, width: 300 }}
-      disableRipple
-      disabled={props.disabled}
-      onClick={props.onClick}
-    >
-      <Typography variant="h3">
-        <span role="img" aria-label="emoji">
-          {buttonText}
-        </span>
-      </Typography>
-    </Button>
+    <Tooltip title="Please make sure that everything is correct">
+      <span style={{ width: 300, height: 300 }}>
+        <Button
+          variant="outlined"
+          style={{ border: `2px solid ${props.category.color}`, width: 300 }}
+          disableRipple
+          disabled={props.disabled}
+          onClick={props.onClick}
+        >
+          <Typography variant="h3">
+            <span role="img" aria-label="emoji">
+              {buttonText}
+            </span>
+          </Typography>
+        </Button>
+      </span>
+    </Tooltip>
   );
 };
 
@@ -395,7 +418,7 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
         justify="flex-start"
         alignItems="center"
         spacing={5}
-        style={{ marginTop: 70, marginBottom: 20 }}
+        style={{ marginTop: 70, marginBottom: 20, padding: 20 }}
       >
         <Grid item style={{ position: "absolute", top: 10 }}>
           <Breadcrumbs

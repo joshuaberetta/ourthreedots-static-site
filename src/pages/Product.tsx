@@ -7,6 +7,9 @@ import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles({
   root: {
+    padding: 20,
+  },
+  words: {
     width: 300,
   },
 });
@@ -15,7 +18,7 @@ const Words = () => {
   const classes = useStyles();
 
   return (
-    <Grid container direction="column" spacing={2} className={classes.root}>
+    <Grid container direction="column" spacing={2} className={classes.words}>
       <Grid item>
         <Typography variant="h4">
           Your{" "}
@@ -33,6 +36,8 @@ const Words = () => {
 };
 
 const Product: React.FC = () => {
+  const classes = useStyles();
+
   return (
     <React.Fragment>
       <Page background={COLOURS.white} id="product">
@@ -43,6 +48,7 @@ const Product: React.FC = () => {
             spacing={10}
             alignItems="center"
             justify="center"
+            className={classes.root}
           >
             <Grid item>
               <WhatDo />

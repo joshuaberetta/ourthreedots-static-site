@@ -1,5 +1,11 @@
 import React, { useCallback } from "react";
-import { Grid, Button, Typography, makeStyles } from "@material-ui/core";
+import {
+  Grid,
+  Button,
+  Typography,
+  makeStyles,
+  Tooltip,
+} from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
 
 const useStyles = makeStyles({
@@ -43,30 +49,32 @@ const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
   return (
     <Grid container direction="column" alignItems="center" justify="center">
       <Grid item {...getRootProps({ className: "dropzone" })}>
-        <Button disableRipple className={classes.button}>
-          <Grid
-            container
-            alignItems="center"
-            justify="center"
-            direction="column"
-            className={classes.container}
-          >
-            <Grid item>
-              <input {...getInputProps()} />
-              {props.acceptedFile ? (
-                <Typography variant="h3">
-                  <span role="img" aria-label="emoji">
-                    👍
-                  </span>
-                </Typography>
-              ) : (
-                <Typography variant="h6" className={classes.text}>
-                  DROP IT IN!
-                </Typography>
-              )}
+        <Tooltip title="Upload your chat file">
+          <Button disableRipple className={classes.button}>
+            <Grid
+              container
+              alignItems="center"
+              justify="center"
+              direction="column"
+              className={classes.container}
+            >
+              <Grid item>
+                <input {...getInputProps()} />
+                {props.acceptedFile ? (
+                  <Typography variant="h3">
+                    <span role="img" aria-label="emoji">
+                      👍
+                    </span>
+                  </Typography>
+                ) : (
+                  <Typography variant="h6" className={classes.text}>
+                    DROP IT IN!
+                  </Typography>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
-        </Button>
+          </Button>
+        </Tooltip>
       </Grid>
     </Grid>
   );

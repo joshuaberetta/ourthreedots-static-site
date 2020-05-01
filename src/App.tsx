@@ -4,7 +4,6 @@ import {
   Route,
   Redirect,
   Switch,
-  useHistory,
 } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
@@ -63,27 +62,26 @@ const App: React.FC = () => {
         <Route path={HREFS.book} exact>
           <Book />
         </Route>
-        {category.category && (
-          <Suspense
-            fallback={<LoadingSpinner loading={true} color={COLOURS.red} />}
-          >
-            {/* {category.category === "digital" && ( */}
+
+        <Suspense
+          fallback={<LoadingSpinner loading={true} color={COLOURS.red} />}
+        >
+          {category.category === "digital" && (
             <Route path={HREFS.digitalStyles} exact>
               <DigitalStyles />
             </Route>
-            {/* )}
-          {category.category && ( */}
+          )}
+          {category.category && (
             <Route path={HREFS.payment} exact>
               <Payment />
             </Route>
-            {/* )}
-          {category.category && ( */}
+          )}
+          {category.category && (
             <Route path={HREFS.success} exact>
               <Success />
             </Route>
-            {/* )} */}
-          </Suspense>
-        )}
+          )}
+        </Suspense>
         <Redirect to={HREFS.home} />
       </Switch>
     </Router>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
 import { COLOURS } from "../shared/Colours";
@@ -7,7 +7,15 @@ import { COLOURS } from "../shared/Colours";
 import Bars from "../components/svg/Bars";
 import Bubbles from "../components/svg/Bubbles";
 
+const useStyles = makeStyles({
+  root: {
+    padding: 20,
+  },
+});
+
 const Product: React.FC = () => {
+  const classes = useStyles();
+
   return (
     <React.Fragment>
       <Page background={COLOURS.white} id="insights">
@@ -17,6 +25,7 @@ const Product: React.FC = () => {
           justify="center"
           alignItems="center"
           spacing={10}
+          className={classes.root}
         >
           <Grid item>
             <Typography variant="h4">

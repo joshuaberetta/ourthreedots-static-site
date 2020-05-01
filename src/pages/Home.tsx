@@ -6,6 +6,9 @@ import WannaRing from "../components/WannaRing";
 import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles({
+  root: {
+    padding: 20,
+  },
   words: {
     width: 300,
   },
@@ -35,6 +38,8 @@ const Words = () => {
 };
 
 const Home: React.FC = () => {
+  const classes = useStyles();
+
   return (
     <React.Fragment>
       <Page background={COLOURS.yellow} id="home">
@@ -45,6 +50,7 @@ const Home: React.FC = () => {
             spacing={10}
             alignItems="center"
             justify="center"
+            className={classes.root}
           >
             <Grid item>
               <Words />

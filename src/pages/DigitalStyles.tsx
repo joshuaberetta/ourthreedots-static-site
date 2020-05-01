@@ -503,7 +503,7 @@ const DigitalStyles: React.FC = () => {
         justify="flex-start"
         alignItems="center"
         spacing={5}
-        style={{ marginTop: 70, marginBottom: 20 }}
+        style={{ marginTop: 70, marginBottom: 20, padding: 20 }}
       >
         <Grid item style={{ position: "absolute", top: 10 }}>
           <Breadcrumbs crumbs={DIGITAL_STYLE_CRUMBS} />

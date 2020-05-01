@@ -1,6 +1,15 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Button, Typography, Grid } from "@material-ui/core";
+import { Button, Typography, Grid, makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  crumbs: {
+    width: "30rem",
+    [theme.breakpoints.down("xs")]: {
+      width: "20rem",
+    },
+  },
+}));
 
 interface CrumbProps {
   href: string;
@@ -28,13 +37,17 @@ interface BreadcrumbsProps {
 }
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = (props) => {
+  const classes = useStyles();
+
   return (
     <Grid
       container
       direction="row"
       alignItems="center"
-      justify="center"
-      spacing={10}
+      justify={props.crumbs.length === 1 ? "center" : "space-between"}
+      // spacing={5}
+      // style={{ minWidth: "20rem" }}
+      className={classes.crumbs}
     >
       {props.crumbs.map((crumb) => (
         <Grid item key={crumb.title}>

@@ -21,6 +21,7 @@
     "@types/stripe": "^7.13.23",
     "date-fns": "^2.11.1",
     "dotenv": "^8.2.0",
+    "json2mq": "^0.2.0",
     "react": "^16.13.1",
     "react-color": "^2.18.0",
     "react-dom": "^16.13.1",

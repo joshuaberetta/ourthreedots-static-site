@@ -9,8 +9,7 @@ import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles({
   root: {
-    paddingLeft: 20,
-    paddingRight: 20,
+    padding: 20,
   },
 });
 
@@ -21,7 +20,7 @@ const Pricing: React.FC = () => {
     <React.Fragment>
       {/* <div id="pricing" /> */}
       <Page background={COLOURS.green} id="pricing">
-        <Grid item>
+        <Grid item className={classes.root}>
           <Typography variant="h3">
             <span role="img" aria-label="emoji">
               💰💰💰💰

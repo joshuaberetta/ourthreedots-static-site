@@ -1,23 +1,30 @@
-import React from "react";
-// import { useHistory } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-// import Link from "@material-ui/core/Link";
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useCallback } from "react";
+import {
+  Grid,
+  Typography,
+  AppBar,
+  Button,
+  makeStyles,
+} from "@material-ui/core";
+// import MenuIcon from "@material-ui/icons/Menu";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { HashLink as Link } from "react-router-hash-link";
+import Drawer from "./Drawer";
 
 import { NavLinkProps } from "../models/NavLink.model";
 import { LINKS } from "../shared/Links";
 import { COLOURS } from "../shared/Colours";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   bar: {
     minHeight: "4rem",
     width: "100%",
     paddingRight: "4rem",
     paddingLeft: "4rem",
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: "2rem",
+      paddingLeft: "2rem",
+    },
   },
   button: {
     position: "relative",
@@ -36,6 +43,16 @@ const useStyles = makeStyles(() => ({
   },
   link: {
     color: "black",
+  },
+  linkContainer: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  drawer: {
+    [theme.breakpoints.up("md")]: {
+      display: "none",
+    },
   },
 }));
 
@@ -59,10 +76,16 @@ const NavLink: React.FC<NavLinkProps> = (props) => {
 
 const NavBar: React.FC = () => {
   const classes = useStyles();
+  const [open, setOpen] = useState<boolean>(false);
+
+  const toggleDrawer = useCallback(() => {
+    setOpen((prev: boolean) => !prev);
+  }, []);
 
   return (
     <React.Fragment>
-      <AppBar color="inherit">
+      <Drawer open={open} toggleDrawer={toggleDrawer} />
+      <AppBar color="inherit" position="fixed">
         <Grid
           container
           direction="row"
@@ -81,7 +104,7 @@ const NavBar: React.FC = () => {
               </Button>
             </Link>
           </Grid>
-          <Grid item>
+          <Grid item className={classes.linkContainer}>
             <Grid container direction="row" spacing={1}>
               {LINKS.map((link) => (
                 <Grid item key={link.title}>
@@ -89,6 +112,12 @@ const NavBar: React.FC = () => {
                 </Grid>
               ))}
             </Grid>
+          </Grid>
+          <Grid item className={classes.drawer} onClick={toggleDrawer}>
+            <Button disableRipple className={classes.button}>
+              {/* <Typography variant="h4">🗄</Typography> */}
+              <MoreHorizIcon fontSize="large" />
+            </Button>
           </Grid>
         </Grid>
       </AppBar>
