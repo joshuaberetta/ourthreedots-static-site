@@ -29,6 +29,7 @@ import ErrorModal from "../components/Error";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Breadcrumbs from "../components/Breadcrumbs";
 import DragAndDrop from "../components/DragDrop";
+import DragAndDropAvatar from "../components/DragDropAvatar";
 import { PriceCard } from "../models/PriceCard.model";
 
 import { CATEGORIES } from "../shared/PricingCategories";
@@ -62,6 +63,12 @@ const Header: React.FC<PriceCard> = (props) => {
 
 interface ContentProps {
   category: PriceCard;
+  acceptedFileTop: FileList;
+  acceptedFileBottom: FileList;
+  previewUrlTop: string;
+  previewUrlBottom: string;
+  handleSelectedFileTop: (acceptedFile: FileList) => void;
+  handleSelectedFileBottom: (acceptedFile: FileList) => void;
   emailChange: (event: Event) => void;
   nameTopChange: (event: Event) => void;
   nameBottomChange: (event: Event) => void;
@@ -88,6 +95,12 @@ const Content: React.FC<ContentProps> = (props) => {
       <Grid item>
         <Form
           category={props.category}
+          acceptedFileTop={props.acceptedFileTop}
+          acceptedFileBottom={props.acceptedFileBottom}
+          previewUrlTop={props.previewUrlTop}
+          previewUrlBottom={props.previewUrlBottom}
+          handleSelectedFileTop={props.handleSelectedFileTop}
+          handleSelectedFileBottom={props.handleSelectedFileBottom}
           emailChange={props.emailChange}
           nameTopChange={props.nameTopChange}
           nameBottomChange={props.nameBottomChange}
@@ -99,6 +112,12 @@ const Content: React.FC<ContentProps> = (props) => {
 
 interface FormProps {
   category: PriceCard;
+  acceptedFileTop: FileList;
+  acceptedFileBottom: FileList;
+  previewUrlTop: string;
+  previewUrlBottom: string;
+  handleSelectedFileTop: (acceptedFile: FileList) => void;
+  handleSelectedFileBottom: (acceptedFile: FileList) => void;
   emailChange: (event: Event) => void;
   nameTopChange: (event: Event) => void;
   nameBottomChange: (event: Event) => void;
@@ -118,6 +137,12 @@ const Form: React.FC<FormProps> = (props) => {
           <FormItem
             category={props.category}
             {...item}
+            acceptedFileTop={props.acceptedFileTop}
+            acceptedFileBottom={props.acceptedFileBottom}
+            previewUrlTop={props.previewUrlTop}
+            previewUrlBottom={props.previewUrlBottom}
+            handleSelectedFileTop={props.handleSelectedFileTop}
+            handleSelectedFileBottom={props.handleSelectedFileBottom}
             emailChange={props.emailChange}
             nameTopChange={props.nameTopChange}
             nameBottomChange={props.nameBottomChange}
@@ -133,6 +158,12 @@ interface FormItemProps {
   label: string;
   background: string;
   category: PriceCard;
+  acceptedFileTop: FileList;
+  acceptedFileBottom: FileList;
+  previewUrlTop: string;
+  previewUrlBottom: string;
+  handleSelectedFileTop: (acceptedFile: FileList) => void;
+  handleSelectedFileBottom: (acceptedFile: FileList) => void;
   emailChange: (event: any) => void;
   nameTopChange: (event: any) => void;
   nameBottomChange: (event: any) => void;
@@ -157,6 +188,37 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     cb = props.nameBottomChange;
   }
 
+  let avatar;
+  if (props.label === "John") {
+    avatar = (
+      <DragAndDropAvatar
+        handleSelectedFile={props.handleSelectedFileTop}
+        color={props.background}
+        acceptedFile={props.acceptedFileTop}
+        previewUrl={props.previewUrlTop}
+        avatar={props.avatar}
+      />
+    );
+  } else if (props.label === "Jane") {
+    avatar = (
+      <DragAndDropAvatar
+        handleSelectedFile={props.handleSelectedFileBottom}
+        color={props.background}
+        acceptedFile={props.acceptedFileBottom}
+        previewUrl={props.previewUrlBottom}
+        avatar={props.avatar}
+      />
+    );
+  } else {
+    avatar = (
+      <IconButton disabled={true} style={{ padding: 5 }}>
+        <Avatar style={{ background: props.background, width: 50, height: 50 }}>
+          <Typography variant="h4">{props.avatar}</Typography>
+        </Avatar>
+      </IconButton>
+    );
+  }
+
   return (
     <Grid
       container
@@ -165,21 +227,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
       alignItems="center"
       spacing={5}
     >
-      <Grid item>
-        <Tooltip title="Add an image">
-          <IconButton
-            disableRipple
-            style={{ padding: 5 }}
-            disabled={props.label === "Email"}
-          >
-            <Avatar
-              style={{ background: props.background, width: 50, height: 50 }}
-            >
-              <Typography variant="h4">{props.avatar}</Typography>
-            </Avatar>
-          </IconButton>
-        </Tooltip>
-      </Grid>
+      <Grid item>{avatar}</Grid>
       <Grid item>
         <TextField
           placeholder={props.label}
@@ -267,8 +315,15 @@ const Next: React.FC<NextProps> = (props) => {
   } else {
     buttonText = "💅 💅 💅";
   }
+
   return (
-    <Tooltip title="Please make sure that everything is correct">
+    <Tooltip
+      title={
+        props.disabled
+          ? "Please make sure that everything is correct"
+          : "Proceed"
+      }
+    >
       <span style={{ width: 300, height: 300 }}>
         <Button
           variant="outlined"
@@ -316,6 +371,10 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
   const [isValid, setIsValid] = useState<boolean>(false);
 
   const [acceptedFile, setAcceptedFile] = useState<any>();
+  const [previewUrlTop, setPreviewUrlTop] = useState<any>();
+  const [acceptedImageTop, setAcceptedImageTop] = useState<any>();
+  const [previewUrlBottom, setPreviewUrlBottom] = useState<any>();
+  const [acceptedImageBottom, setAcceptedImageBottom] = useState<any>();
   const [category, setCategory] = useState<PriceCard>({
     title: "",
     description: "",
@@ -332,17 +391,62 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
     setCategory(CAT);
   }, [props.category, locationContext]);
 
+  useEffect(() => {
+    if (!acceptedImageTop) {
+      return;
+    }
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setPreviewUrlTop(fileReader.result);
+    };
+    fileReader.readAsDataURL(acceptedImageTop);
+  }, [acceptedImageTop]);
+
+  useEffect(() => {
+    if (!acceptedImageBottom) {
+      return;
+    }
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setPreviewUrlBottom(fileReader.result);
+    };
+    fileReader.readAsDataURL(acceptedImageBottom);
+  }, [acceptedImageBottom]);
+
   // very simple form validation
   useEffect(() => {
-    if (email && checkEmail(email) && nameTop && nameBottom && acceptedFile) {
+    if (
+      email &&
+      checkEmail(email) &&
+      nameTop &&
+      nameBottom &&
+      acceptedFile &&
+      acceptedImageTop &&
+      acceptedImageBottom
+    ) {
       setIsValid(true);
     } else {
       setIsValid(false);
     }
-  }, [email, nameTop, nameBottom, acceptedFile]);
+  }, [
+    email,
+    nameTop,
+    nameBottom,
+    acceptedFile,
+    acceptedImageTop,
+    acceptedImageBottom,
+  ]);
 
   const handleSelectedFile = (acceptedFile: FileList) => {
     setAcceptedFile(acceptedFile);
+  };
+
+  const handleSelectedImageTop = (acceptedImage: FileList) => {
+    setAcceptedImageTop(acceptedImage);
+  };
+
+  const handleSelectedImageBottom = (acceptedImage: FileList) => {
+    setAcceptedImageBottom(acceptedImage);
   };
 
   const handleStartDateChange = (date: Date) => {
@@ -380,7 +484,9 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
       formData.append("dateEnd", selectedEndDate.toLocaleString("en-uk"));
       formData.append("status", "STAGE-0");
       formData.append("category", props.category);
-      formData.append("image", acceptedFile);
+      formData.append("file", acceptedFile);
+      formData.append("imageTop", acceptedImageTop);
+      formData.append("imageBottom", acceptedImageTop);
 
       // TODO
       const responseData = await sendRequest(
@@ -440,6 +546,12 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
             nameBottomChange={handleNameBottomChange}
             handleSelectedFile={handleSelectedFile}
             acceptedFile={acceptedFile}
+            handleSelectedFileTop={handleSelectedImageTop}
+            acceptedFileTop={acceptedImageTop}
+            previewUrlTop={previewUrlTop}
+            handleSelectedFileBottom={handleSelectedImageBottom}
+            acceptedFileBottom={acceptedImageBottom}
+            previewUrlBottom={previewUrlBottom}
           />
         </Grid>
         <Grid item>

@@ -14,10 +14,7 @@ import Pricing from "./pages/Pricing";
 import Footer from "./pages/Footer";
 
 import BasicForm from "./pages/BasicForm";
-// import DigitalStyles from "./pages/DigitalStyles";
 import Book from "./pages/Book";
-// import Payment from "./pages/Payment";
-// import Success from "./pages/Success";
 
 import { HREFS } from "./shared/Hrefs";
 import { CategoryContext } from "./shared/context/form-context";
@@ -62,7 +59,6 @@ const App: React.FC = () => {
         <Route path={HREFS.book} exact>
           <Book />
         </Route>
-
         <Suspense
           fallback={<LoadingSpinner loading={true} color={COLOURS.red} />}
         >
