@@ -3,6 +3,8 @@ import { Grid, Typography, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
 import WhatDo from "../components/WhatDo";
+
+import { PRODUCT } from "../shared/Content";
 import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles({
@@ -20,16 +22,7 @@ const Words = () => {
   return (
     <Grid container direction="column" spacing={2} className={classes.words}>
       <Grid item>
-        <Typography variant="h4">
-          Your{" "}
-          <span role="img" aria-label="emoji">
-            💩
-          </span>{" "}
-          is our business.{" "}
-          <span role="img" aria-label="emoji">
-            😏
-          </span>
-        </Typography>
+        <Typography variant="h4">{PRODUCT.title}</Typography>
       </Grid>
     </Grid>
   );

@@ -5,6 +5,7 @@ import { LocationContext } from "../shared/context/form-context";
 
 import Breadcrumbs from "../components/Breadcrumbs";
 
+import { SUCCESS } from "../shared/Content";
 import { SUCCESS_CRUMBS } from "../shared/Crumbs";
 
 const useStyles = makeStyles({
@@ -18,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Payment: React.FC = () => {
+const Success: React.FC = () => {
   const locationContext = useContext(LocationContext);
   const classes = useStyles();
 
@@ -39,22 +40,13 @@ const Payment: React.FC = () => {
         <Breadcrumbs crumbs={SUCCESS_CRUMBS} />
       </Grid>
       <Grid item>
-        <Typography variant="h1">
-          <span role="img" aria-label="e">
-            🎉
-          </span>
-        </Typography>
+        <Typography variant="h1">{SUCCESS.title}</Typography>
       </Grid>
       <Grid item>
-        <Typography variant="h6">
-          Please check your email for order confirmation{" "}
-          <span role="img" aria-label="e">
-            💌
-          </span>
-        </Typography>
+        <Typography variant="h6">{SUCCESS.subtitle}</Typography>
       </Grid>
     </Grid>
   );
 };
 
-export default Payment;
+export default Success;

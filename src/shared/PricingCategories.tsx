@@ -1,32 +1,30 @@
 import { PriceCard } from "../models/PriceCard.model";
 
+import { PRICING } from "./Content";
 import { COLOURS } from "./Colours";
 import { HREFS } from "./Hrefs";
 
 export const CATEGORIES: PriceCard[] = [
   {
-    title: "insightful",
-    description:
-      "Only the chat insights in digital form. No custom look and feel 🤡",
-    price: "$ 4.99",
+    title: PRICING.insightful.title,
+    description: PRICING.insightful.description,
+    price: PRICING.insightful.price,
     href: HREFS.insightful,
     background: COLOURS.red,
     color: COLOURS.blue,
   },
   {
-    title: "digital",
-    description:
-      "The insights and chat, in digital form. Custom look and feel 😀",
-    price: "$ 9.99",
+    title: PRICING.digital.title,
+    description: PRICING.digital.description,
+    price: PRICING.digital.price,
     href: HREFS.digitalForm,
     background: COLOURS.yellow,
     color: COLOURS.red,
   },
   {
-    title: "book",
-    description:
-      "The insights and chat, printed and shipped to your door. Custom look and feel 😍",
-    price: "$ 39.99",
+    title: PRICING.book.title,
+    description: PRICING.book.description,
+    price: PRICING.book.price,
     href: HREFS.book,
     background: COLOURS.blue,
     color: COLOURS.yellow,

@@ -8,6 +8,8 @@ import {
 } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
 
+import { BASIC_FORM } from "../shared/Content";
+
 const useStyles = makeStyles({
   container: {
     height: 300,
@@ -42,14 +44,14 @@ const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDropAccepted,
-    accept: "image/jpg, image/jpeg, image/png, text/plain",
+    accept: "text/plain",
     multiple: false,
   });
 
   return (
     <Grid container direction="column" alignItems="center" justify="center">
       <Grid item {...getRootProps({ className: "dropzone" })}>
-        <Tooltip title="Upload your chat file">
+        <Tooltip title={BASIC_FORM.tooltips.dragAndDrop}>
           <Button disableRipple className={classes.button}>
             <Grid
               container
@@ -62,13 +64,11 @@ const DragAndDrop: React.FC<DragAndDropProps> = (props) => {
                 <input {...getInputProps()} />
                 {props.acceptedFile ? (
                   <Typography variant="h3">
-                    <span role="img" aria-label="emoji">
-                      👍
-                    </span>
+                    {BASIC_FORM.dragAndDrop.success}
                   </Typography>
                 ) : (
                   <Typography variant="h6" className={classes.text}>
-                    DROP IT IN!
+                    {BASIC_FORM.dragAndDrop.default}
                   </Typography>
                 )}
               </Grid>

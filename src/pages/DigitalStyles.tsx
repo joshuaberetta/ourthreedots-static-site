@@ -15,6 +15,7 @@ import {
   IdContext,
   FirstFormContext,
 } from "../shared/context/form-context";
+import { DIGITAL_STYLES } from "../shared/Content";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 import { DIGITAL_STYLE_CRUMBS } from "../shared/Crumbs";
@@ -25,19 +26,19 @@ const CAT = CATEGORIES.filter((cat) => cat.title === "digital")[0];
 const CONTENT = [
   {
     side: "left",
-    msg: "So what does this thing actually do?",
+    msg: DIGITAL_STYLES.messages.messageOne,
     background: COLOURS.blue,
     color: COLOURS.white,
   },
   {
     side: "right",
-    msg: "We take your chat messages",
+    msg: DIGITAL_STYLES.messages.messageTwo,
     color: COLOURS.red,
     borderColor: COLOURS.red,
   },
   {
     side: "left",
-    msg: "Wow. That’s awesome!",
+    msg: DIGITAL_STYLES.messages.messageThree,
     background: COLOURS.blue,
     color: COLOURS.white,
   },
@@ -510,10 +511,7 @@ const DigitalStyles: React.FC = () => {
         </Grid>
         <Grid item>
           <Typography variant="h4" style={{ color: COLOURS.red }}>
-            Make the look your own{" "}
-            <span role="img" aria-label="emoji">
-              💅
-            </span>
+            {DIGITAL_STYLES.title}
           </Typography>
         </Grid>
         <Grid item>

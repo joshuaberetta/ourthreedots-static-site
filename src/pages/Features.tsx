@@ -2,7 +2,10 @@ import React from "react";
 import { Grid, Typography, Avatar, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
+
+import { FEATURES } from "../shared/Content";
 import { COLOURS } from "../shared/Colours";
+
 import Look from "../components/svg/Look";
 import Dates from "../components/svg/Dates";
 
@@ -21,7 +24,7 @@ const Left = () => (
     spacing={5}
   >
     <Grid item>
-      <Typography variant="h6">Make the look your own</Typography>
+      <Typography variant="h6">{FEATURES.titleOne}</Typography>
     </Grid>
     <Grid item>
       <Look />
@@ -38,7 +41,7 @@ const Right = () => (
     spacing={5}
   >
     <Grid item>
-      <Typography variant="h6">Pick your dates</Typography>
+      <Typography variant="h6">{FEATURES.titleTwo}</Typography>
     </Grid>
     <Grid item>
       <Dates />
@@ -89,7 +92,7 @@ const Middle = () => (
     spacing={5}
   >
     <Grid item>
-      <Typography variant="h6">Choose your avatars</Typography>
+      <Typography variant="h6">{FEATURES.titleThree}</Typography>
     </Grid>
     <Grid item>
       <Grid container direction="row" spacing={2}>

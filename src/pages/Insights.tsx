@@ -2,6 +2,8 @@ import React from "react";
 import { Grid, Typography, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
+
+import { INSIGHTS } from "../shared/Content";
 import { COLOURS } from "../shared/Colours";
 
 import Bars from "../components/svg/Bars";
@@ -28,12 +30,7 @@ const Product: React.FC = () => {
           className={classes.root}
         >
           <Grid item>
-            <Typography variant="h4">
-              Discover unique trends{" "}
-              <span role="img" aria-label="emoji">
-                🤔
-              </span>
-            </Typography>
+            <Typography variant="h4">{INSIGHTS.title}</Typography>
           </Grid>
           <Grid item>
             <Grid

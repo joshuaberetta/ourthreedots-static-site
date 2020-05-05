@@ -6,6 +6,8 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
+
+import { ERROR_MODAL } from "../shared/Content";
 import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles({
@@ -49,10 +51,7 @@ const ErrorModal: React.FC<ErrorModalProps> = (props) => {
       >
         <Grid item>
           <Typography variant="h5" className={classes.text}>
-            Something went wrong{" "}
-            <span role="img" aria-label="emoji">
-              😢
-            </span>
+            {ERROR_MODAL.title}
           </Typography>
         </Grid>
         <Grid item>
@@ -62,11 +61,7 @@ const ErrorModal: React.FC<ErrorModalProps> = (props) => {
             className={classes.button}
             disableRipple
           >
-            <Typography variant="h4">
-              <span role="img" aria-label="emoji">
-                🏠
-              </span>
-            </Typography>
+            <Typography variant="h4">{ERROR_MODAL.button}</Typography>
           </Button>
         </Grid>
       </Grid>

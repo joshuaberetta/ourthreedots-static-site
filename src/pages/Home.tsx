@@ -3,6 +3,7 @@ import { Grid, Typography, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
 import WannaRing from "../components/WannaRing";
+import { HOME } from "../shared/Content";
 import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles({
@@ -20,18 +21,10 @@ const Words = () => {
   return (
     <Grid container direction="column" spacing={2} className={classes.words}>
       <Grid item>
-        <Typography variant="h4">
-          Digital memories, brought to life{" "}
-          <span role="img" aria-label="emoji">
-            🔥
-          </span>
-        </Typography>
+        <Typography variant="h4">{HOME.title}</Typography>
       </Grid>
       <Grid item>
-        <Typography variant="body1">
-          Remember and relive shared memories, just as you would with a photo
-          album.
-        </Typography>
+        <Typography variant="body1">{HOME.subtitle}</Typography>
       </Grid>
     </Grid>
   );

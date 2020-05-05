@@ -5,24 +5,22 @@ import {
   Tooltip,
   IconButton,
   Avatar,
+  makeStyles,
 } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
 
-// const useStyles = makeStyles({
-//   container: {
-//     height: 300,
-//     width: 300,
-//     background: "none",
-//     border: (props: DragAndDropProps) => `dashed 2px ${props.color}`,
-//     borderRadius: 10,
-//   },
-//   button: {
-//     borderRadius: 10,
-//   },
-//   text: {
-//     color: (props: DragAndDropProps) => props.color,
-//   },
-// });
+import { BASIC_FORM } from "../shared/Content";
+
+const useStyles = makeStyles({
+  avatar: {
+    background: (props: DragAndDropAvatarProps) => props.color,
+    width: 50,
+    height: 50,
+  },
+  icon: {
+    padding: 5,
+  },
+});
 
 interface DragAndDropAvatarProps {
   avatar: string;
@@ -33,7 +31,7 @@ interface DragAndDropAvatarProps {
 }
 
 const DragAndDropAvatar: React.FC<DragAndDropAvatarProps> = (props) => {
-  // const classes = useStyles(props);
+  const classes = useStyles(props);
 
   const onDropAccepted = useCallback(
     (acceptedFiles) => {
@@ -50,13 +48,10 @@ const DragAndDropAvatar: React.FC<DragAndDropAvatarProps> = (props) => {
 
   return (
     <Grid item {...getRootProps({ className: "dropzone" })}>
-      <Tooltip title="Add an image">
-        <IconButton disableRipple style={{ padding: 5 }}>
+      <Tooltip title={BASIC_FORM.tooltips.avatar}>
+        <IconButton disableRipple className={classes.icon}>
           <input {...getInputProps()} />
-          <Avatar
-            src={props.previewUrl}
-            style={{ background: props.color, width: 50, height: 50 }}
-          >
+          <Avatar src={props.previewUrl} className={classes.avatar}>
             <Typography variant="h4">{props.avatar}</Typography>
           </Avatar>
         </IconButton>

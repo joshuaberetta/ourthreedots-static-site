@@ -32,8 +32,8 @@ import DragAndDrop from "../components/DragDrop";
 import DragAndDropAvatar from "../components/DragDropAvatar";
 import { PriceCard } from "../models/PriceCard.model";
 
+import { BASIC_FORM } from "../shared/Content";
 import { CATEGORIES } from "../shared/PricingCategories";
-import { FORM_ITEMS } from "../shared/FormItems";
 import { INSIGHTFUL_FORM_CRUMBS, DIGITAL_FORM_CRUMBS } from "../shared/Crumbs";
 import { HREFS } from "../shared/Hrefs";
 import * as STYLES from "../shared/Styles";
@@ -132,7 +132,7 @@ const Form: React.FC<FormProps> = (props) => {
       justify="center"
       spacing={4}
     >
-      {FORM_ITEMS.map((item) => (
+      {BASIC_FORM.formItems.map((item) => (
         <Grid item key={item.label}>
           <FormItem
             category={props.category}
@@ -311,17 +311,17 @@ interface NextProps {
 const Next: React.FC<NextProps> = (props) => {
   let buttonText;
   if (props.category.title === "insightful") {
-    buttonText = "👉 👉 👉";
+    buttonText = BASIC_FORM.button.insightful;
   } else {
-    buttonText = "💅 💅 💅";
+    buttonText = BASIC_FORM.button.digital;
   }
 
   return (
     <Tooltip
       title={
         props.disabled
-          ? "Please make sure that everything is correct"
-          : "Proceed"
+          ? BASIC_FORM.tooltips.next.disabled
+          : BASIC_FORM.tooltips.next.proceed
       }
     >
       <span style={{ width: 300, height: 300 }}>

@@ -3,31 +3,31 @@ import Grid from "@material-ui/core/Grid";
 
 import Bubble from "./Bubble";
 
+import { PRODUCT } from "../shared/Content";
 import { COLOURS } from "../shared/Colours";
 
 const CONTENT = [
   {
     side: "right",
-    msg: "So what does this thing actually do? ",
+    msg: PRODUCT.messages.messageOne,
     background: COLOURS.blue,
     color: COLOURS.white,
   },
   {
     side: "left",
-    msg:
-      "We take your chat messages, run it through some fancy analysis and pump out a beautiful poo, print or digital",
+    msg: PRODUCT.messages.messageTwo,
     color: COLOURS.red,
     borderColor: COLOURS.red,
   },
   {
     side: "right",
-    msg: "Wow. That’s awesome!",
+    msg: PRODUCT.messages.messageThree,
     background: COLOURS.blue,
     color: COLOURS.white,
   },
   {
     side: "left",
-    msg: "Yeehaa! 🕺",
+    msg: PRODUCT.messages.messageFour,
     color: COLOURS.red,
     borderColor: COLOURS.red,
   },

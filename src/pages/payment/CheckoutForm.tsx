@@ -6,10 +6,13 @@ import { Typography, Grid, Button, makeStyles } from "@material-ui/core";
 import ErrorModal from "../../components/Error";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import CardSection from "./CardSection";
+
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { IdContext, CategoryContext } from "../../shared/context/form-context";
-import { CATEGORIES } from "../../shared/PricingCategories";
 import { PriceCard } from "../../models/PriceCard.model";
+
+import { CATEGORIES } from "../../shared/PricingCategories";
+import { PAYMENT } from "../../shared/Content";
 import { COLOURS } from "../../shared/Colours";
 
 const useStyles = makeStyles({
@@ -111,11 +114,7 @@ const CheckoutForm = () => {
           justify="center"
         >
           <Grid item>
-            <Typography variant="h3">
-              <span role="img" aria-label="emjoi">
-                💳
-              </span>
-            </Typography>
+            <Typography variant="h3">{PAYMENT.title}</Typography>
           </Grid>
           <Grid item>
             <CardSection />
@@ -129,11 +128,7 @@ const CheckoutForm = () => {
                   onClick={() => history.push("/")}
                   disabled={!stripe || !elements || loading}
                 >
-                  <Typography variant="h3">
-                    <span role="img" aria-label="emoji">
-                      ✋
-                    </span>
-                  </Typography>
+                  <Typography variant="h3">{PAYMENT.buttons.cancel}</Typography>
                 </Button>
               </Grid>
               <Grid item>
@@ -144,9 +139,7 @@ const CheckoutForm = () => {
                   disabled={!stripe || !elements || loading}
                 >
                   <Typography variant="h3">
-                    <span role="img" aria-label="emoji">
-                      🎉
-                    </span>
+                    {PAYMENT.buttons.proceed}
                   </Typography>
                 </Button>
               </Grid>

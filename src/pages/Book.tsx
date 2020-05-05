@@ -16,6 +16,7 @@ import Breadcrumbs from "../components/Breadcrumbs";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorModal from "../components/Error";
 
+import { BOOK_DEFAULT } from "../shared/Content";
 import { SUCCESS_CRUMBS } from "../shared/Crumbs";
 
 const useStyles = makeStyles({
@@ -101,24 +102,15 @@ const Book: React.FC = () => {
           <Breadcrumbs crumbs={SUCCESS_CRUMBS} />
         </Grid>
         <Grid item>
-          <Typography variant="h4">
-            Oh dear{" "}
-            <span role="img" aria-label="emoji">
-              😢
-            </span>
-          </Typography>
+          <Typography variant="h4">{BOOK_DEFAULT.title}</Typography>
         </Grid>
         <Grid item className={classes.body}>
-          <Typography>
-            This feature is not available yet and will be based on popular
-            demand. If this is something that you would like, please leave your
-            email below and you will be notified when you can order.
-          </Typography>
+          <Typography>{BOOK_DEFAULT.subtitle}</Typography>
         </Grid>
         <Grid item>
           <TextField
             id="outlined-basic"
-            placeholder="email"
+            placeholder={BOOK_DEFAULT.placeholder}
             variant="outlined"
             autoComplete="off"
             className={classes.textField}
@@ -132,11 +124,7 @@ const Book: React.FC = () => {
             disableRipple
             onClick={handleClick}
           >
-            <Typography variant="h3">
-              <span role="img" aria-label="emoji">
-                📨 📨 📨
-              </span>
-            </Typography>
+            <Typography variant="h3">{BOOK_DEFAULT.button}</Typography>
           </Button>
         </Grid>
       </Grid>

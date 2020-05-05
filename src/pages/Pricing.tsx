@@ -4,6 +4,7 @@ import { Grid, Typography, makeStyles } from "@material-ui/core";
 import Page from "./Page";
 import Card from "../components/Card";
 
+import { PRICING } from "../shared/Content";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 
@@ -21,11 +22,7 @@ const Pricing: React.FC = () => {
       {/* <div id="pricing" /> */}
       <Page background={COLOURS.green} id="pricing">
         <Grid item className={classes.root}>
-          <Typography variant="h3">
-            <span role="img" aria-label="emoji">
-              💰💰💰💰
-            </span>
-          </Typography>
+          <Typography variant="h3">{PRICING.title}</Typography>
         </Grid>
         <Grid item>
           <Grid
