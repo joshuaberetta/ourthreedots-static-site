@@ -19,6 +19,7 @@ import { DIGITAL_STYLES } from "../shared/Content";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
 import { DIGITAL_STYLE_CRUMBS } from "../shared/Crumbs";
+import { HREFS } from "../shared/Hrefs";
 
 const CAT = CATEGORIES.filter((cat) => cat.title === "digital")[0];
 
@@ -471,7 +472,7 @@ const DigitalStyles: React.FC = () => {
 
       // TODO
       const responseData = await sendRequest(
-        "http://localhost:5000/api/users/insightful",
+        `${process.env.REACT_APP_API}/api/users/insightful`,
         "PATCH",
         formData,
       );
@@ -490,7 +491,7 @@ const DigitalStyles: React.FC = () => {
         isStyleValid: false,
       });
       // setClicked((prev: boolean) => !prev);
-      history.push("/payment");
+      history.push(HREFS.almost);
     } catch {
       setIsError(true);
     }
@@ -504,7 +505,7 @@ const DigitalStyles: React.FC = () => {
         justify="flex-start"
         alignItems="center"
         spacing={5}
-        style={{ marginTop: 70, marginBottom: 20, padding: 20 }}
+        style={{ padding: 20, marginTop: 70 }}
       >
         <Grid item style={{ position: "absolute", top: 10 }}>
           <Breadcrumbs crumbs={DIGITAL_STYLE_CRUMBS} />

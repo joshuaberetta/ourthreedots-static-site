@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Grid,
@@ -21,8 +21,8 @@ import { SUCCESS_CRUMBS } from "../shared/Crumbs";
 
 const useStyles = makeStyles({
   root: {
-    marginTop: 70,
     padding: 20,
+    paddingTop: 70,
     height: "40rem",
   },
   body: {
@@ -57,9 +57,9 @@ const Book: React.FC = () => {
     setEmail((event.target as HTMLInputElement).value);
   };
 
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
+  // useEffect(() => {
+  //   console.log(email);
+  // }, [email]);
 
   const handleClick = async () => {
     try {
@@ -71,7 +71,7 @@ const Book: React.FC = () => {
       formData.append("email", email);
 
       const responseData = await sendRequest(
-        "http://localhost:5000/api/users/email",
+        `${process.env.REACT_APP_API}/api/users/email`,
         "POST",
         formData,
       );

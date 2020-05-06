@@ -18,6 +18,7 @@ import { COLOURS } from "../shared/Colours";
 
 const useStyles = makeStyles({
   root: {
+    padding: 20,
     marginTop: 70,
     minHeight: "40rem",
   },

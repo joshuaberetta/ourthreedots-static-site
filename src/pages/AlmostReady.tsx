@@ -5,7 +5,7 @@ import { LocationContext } from "../shared/context/form-context";
 
 import Breadcrumbs from "../components/Breadcrumbs";
 
-import { SUCCESS } from "../shared/Content";
+import { ALMOST_READY } from "../shared/Content";
 import { SUCCESS_CRUMBS } from "../shared/Crumbs";
 
 const useStyles = makeStyles({
@@ -20,12 +20,12 @@ const useStyles = makeStyles({
   },
 });
 
-const Success: React.FC = () => {
+const AlmostReady: React.FC = () => {
   const locationContext = useContext(LocationContext);
   const classes = useStyles();
 
   useEffect(() => {
-    locationContext.updateLocation("/success");
+    locationContext.updateLocation("/almost");
   });
 
   return (
@@ -41,13 +41,13 @@ const Success: React.FC = () => {
         <Breadcrumbs crumbs={SUCCESS_CRUMBS} />
       </Grid>
       <Grid item>
-        <Typography variant="h1">{SUCCESS.title}</Typography>
+        <Typography variant="h3">{ALMOST_READY.title}</Typography>
       </Grid>
       <Grid item>
-        <Typography variant="h6">{SUCCESS.subtitle}</Typography>
+        <Typography variant="body1">{ALMOST_READY.subtitle}</Typography>
       </Grid>
     </Grid>
   );
 };
 
-export default Success;
+export default AlmostReady;

@@ -1,5 +1,7 @@
 import React from "react";
 import { Grid, Typography, makeStyles } from "@material-ui/core";
+
+import { INSIGHTS } from "../../shared/Content";
 import { COLOURS } from "../../shared/Colours";
 
 const useStyles = makeStyles({
@@ -20,32 +22,32 @@ interface BarProps {
 
 const BARS: BarProps[] = [
   {
-    emoji: "🤡",
+    emoji: INSIGHTS.emoji[0],
     color: COLOURS.red,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "🎲",
+    emoji: INSIGHTS.emoji[1],
     color: COLOURS.blue,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "🕺",
+    emoji: INSIGHTS.emoji[2],
     color: COLOURS.green,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "🔥",
+    emoji: INSIGHTS.emoji[3],
     color: COLOURS.yellow,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "😀",
+    emoji: INSIGHTS.emoji[4],
     color: COLOURS.red,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "🙌",
+    emoji: INSIGHTS.emoji[5],
     color: COLOURS.blue,
     height: 50 + ~~(Math.random() * 150),
   },

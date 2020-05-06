@@ -83,9 +83,9 @@ const GlobalState: React.FC<GlobalStateProps> = (props) => {
     setLocation("/");
   }, []);
 
-  useEffect(() => {
-    console.log(location, id, category);
-  }, [location, id, category]);
+  // useEffect(() => {
+  //   console.log(location, id, category);
+  // }, [location, id, category]);
 
   const updateForm = useCallback(
     (updatedItems: FormContextType) => {

@@ -21,9 +21,10 @@ import { CategoryContext } from "./shared/context/form-context";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { COLOURS } from "./shared/Colours";
 
-const Payment = lazy(() => import("./pages/Payment"));
-const Success = lazy(() => import("./pages/Success"));
+// const Payment = lazy(() => import("./pages/Payment"));
+// const Success = lazy(() => import("./pages/Success"));
 const DigitalStyles = lazy(() => import("./pages/DigitalStyles"));
+const AlmostReady = lazy(() => import("./pages/AlmostReady"));
 
 const MainPage: React.FC = () => {
   return (
@@ -40,7 +41,7 @@ const MainPage: React.FC = () => {
 
 const App: React.FC = () => {
   const category = useContext(CategoryContext);
-  console.log("Category: ", category.category);
+  // console.log("Category: ", category.category);
   // const history = useHistory();
 
   return (
@@ -68,6 +69,11 @@ const App: React.FC = () => {
             </Route>
           )}
           {category.category && (
+            <Route path={HREFS.almost} exact>
+              <AlmostReady />
+            </Route>
+          )}
+          {/* {category.category && (
             <Route path={HREFS.payment} exact>
               <Payment />
             </Route>
@@ -76,7 +82,7 @@ const App: React.FC = () => {
             <Route path={HREFS.success} exact>
               <Success />
             </Route>
-          )}
+          )} */}
         </Suspense>
         <Redirect to={HREFS.home} />
       </Switch>

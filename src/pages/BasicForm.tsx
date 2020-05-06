@@ -490,7 +490,7 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
 
       // TODO
       const responseData = await sendRequest(
-        "http://localhost:5000/api/users/insightful",
+        `${process.env.REACT_APP_API}/api/users/insightful`,
         "POST",
         formData,
       );
@@ -508,8 +508,9 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
         formLoading: false,
       });
 
+      // TODO - update when payment is ready
       history.push(
-        category.title === "insightful" ? HREFS.payment : HREFS.digitalStyles,
+        category.title === "insightful" ? HREFS.almost : HREFS.digitalStyles,
       );
     } catch (err) {
       setIsError(true);
@@ -524,7 +525,7 @@ const BasicForm: React.FC<BasicFormProps> = (props) => {
         justify="flex-start"
         alignItems="center"
         spacing={5}
-        style={{ marginTop: 70, marginBottom: 20, padding: 20 }}
+        style={{ padding: 20, marginTop: 70 }}
       >
         <Grid item style={{ position: "absolute", top: 10 }}>
           <Breadcrumbs

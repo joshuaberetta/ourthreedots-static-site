@@ -17,7 +17,7 @@ export const PRODUCT = {
   messages: {
     messageOne: "So what does this thing actually do?",
     messageTwo:
-      "We take your chat messages, run it through some fancy analysis and pump out a beautiful poo, print or digital",
+      "We take your chat messages, run it through some fancy analysis and pump out a beautiful book, print or digital",
     messageThree: "Wow. That’s awesome!",
     messageFour: "Yeehaa! 🕺",
   },
@@ -31,6 +31,7 @@ export const FEATURES = {
 
 export const INSIGHTS = {
   title: "Discover unique trends 🤔",
+  emoji: ["🤡", "🎲", "🕺", "🔥", "😀", "🙌"],
 };
 
 export const PRICING = {
@@ -94,9 +95,9 @@ export const BASIC_FORM = {
 export const DIGITAL_STYLES = {
   title: "Make the look your own 💅",
   messages: {
-    messageOne: "So what does this thing actually do?",
-    messageTwo: "We take your chat messages",
-    messageThree: "Wow. That’s awesome",
+    messageOne: "You can choose your own bubble and text styles here.",
+    messageTwo: "Awesome 😀",
+    messageThree: "Go wild - but make sure that the text is still readable",
   },
 };
 
@@ -124,4 +125,10 @@ export const BOOK_DEFAULT = {
 export const ERROR_MODAL = {
   title: "Something went wrong 😢",
   button: "🏠",
+};
+
+export const ALMOST_READY = {
+  title: "We're almost ready! 😀",
+  subtitle:
+    "Your details have been recorded and you will be notified when we're ready for you 🕺",
 };

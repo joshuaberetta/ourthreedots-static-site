@@ -14,6 +14,7 @@ import { PriceCard } from "../../models/PriceCard.model";
 import { CATEGORIES } from "../../shared/PricingCategories";
 import { PAYMENT } from "../../shared/Content";
 import { COLOURS } from "../../shared/Colours";
+import { HREFS } from "../../shared/Hrefs";
 
 const useStyles = makeStyles({
   buttonCancel: {
@@ -67,7 +68,7 @@ const CheckoutForm = () => {
       const formData = new FormData();
       formData.append("category", categoryContext.category);
       responseData = await sendRequest(
-        "http://localhost:5000/api/payment",
+        `${process.env.REACT_APP_API}/api/payment`,
         "POST",
         formData,
       );
@@ -91,12 +92,12 @@ const CheckoutForm = () => {
 
     if (result.error) {
       // Show error to your customer (e.g., insufficient funds)
-      console.log(result.error.message);
+      // console.log(result.error.message);
       setIsError(true);
     } else {
       // The payment has been processed!
       if (result.paymentIntent!.status === "succeeded") {
-        history.push("/success");
+        history.push(HREFS.success);
       }
     }
   };
