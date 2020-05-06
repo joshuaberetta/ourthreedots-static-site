@@ -1,24 +1,30 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { Avatar } from "@material-ui/core";
+import { Grid, Typography, Avatar, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
+
+import { FEATURES } from "../shared/Content";
 import { COLOURS } from "../shared/Colours";
+
 import Look from "../components/svg/Look";
 import Dates from "../components/svg/Dates";
+
+const useStyles = makeStyles({
+  root: {
+    padding: 20,
+  },
+});
 
 const Left = () => (
   <Grid
     container
     direction="column"
     alignItems="center"
-    // style={{ height: "30rem" }}
     justify="flex-start"
     spacing={5}
   >
     <Grid item>
-      <Typography variant="h6">Make the look your own</Typography>
+      <Typography variant="h6">{FEATURES.titleOne}</Typography>
     </Grid>
     <Grid item>
       <Look />
@@ -31,12 +37,11 @@ const Right = () => (
     container
     direction="column"
     alignItems="center"
-    // style={{ height: "30rem" }}
     justify="flex-start"
     spacing={5}
   >
     <Grid item>
-      <Typography variant="h6">Pick your dates</Typography>
+      <Typography variant="h6">{FEATURES.titleTwo}</Typography>
     </Grid>
     <Grid item>
       <Dates />
@@ -83,17 +88,16 @@ const Middle = () => (
     container
     direction="column"
     alignItems="center"
-    // style={{ height: "30rem" }}
     justify="flex-start"
     spacing={5}
   >
     <Grid item>
-      <Typography variant="h6">Choose your avatars</Typography>
+      <Typography variant="h6">{FEATURES.titleThree}</Typography>
     </Grid>
     <Grid item>
       <Grid container direction="row" spacing={2}>
         {AVATARS.map((avatar) => (
-          <Grid item>
+          <Grid item key={avatar.name}>
             <AvatarJJ {...avatar} />
           </Grid>
         ))}
@@ -103,28 +107,34 @@ const Middle = () => (
 );
 
 const Features: React.FC = () => {
+  const classes = useStyles();
+
   return (
-    <Page background={COLOURS.red}>
-      <Grid item>
-        <Grid
-          container
-          direction="row"
-          spacing={10}
-          alignItems="flex-start"
-          justify="center"
-        >
-          <Grid item>
-            <Left />
-          </Grid>
-          <Grid item>
-            <Middle />
-          </Grid>
-          <Grid item>
-            <Right />
+    <React.Fragment>
+      {/* <div id="features" /> */}
+      <Page background={COLOURS.red} id="features">
+        <Grid item>
+          <Grid
+            container
+            direction="row"
+            spacing={10}
+            alignItems="flex-start"
+            justify="center"
+            className={classes.root}
+          >
+            <Grid item>
+              <Left />
+            </Grid>
+            <Grid item>
+              <Middle />
+            </Grid>
+            <Grid item>
+              <Right />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Page>
+      </Page>
+    </React.Fragment>
   );
 };
 

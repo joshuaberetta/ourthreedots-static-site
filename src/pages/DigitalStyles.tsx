@@ -1,33 +1,45 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import "date-fns";
 import { Grid, Typography, IconButton, Paper, Button } from "@material-ui/core";
 import { SwatchesPicker } from "react-color";
 
 import Bubble from "../components/Bubble";
+import Breadcrumbs from "../components/Breadcrumbs";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorModal from "../components/Error";
 
-import { StylesContext } from "../shared/context/form-context";
+import { useHttpClient } from "../shared/hooks/http-hook";
+
+import {
+  StylesContext,
+  IdContext,
+  FirstFormContext,
+} from "../shared/context/form-context";
+import { DIGITAL_STYLES } from "../shared/Content";
 import { CATEGORIES } from "../shared/PricingCategories";
 import { COLOURS } from "../shared/Colours";
+import { DIGITAL_STYLE_CRUMBS } from "../shared/Crumbs";
+import { HREFS } from "../shared/Hrefs";
 
 const CAT = CATEGORIES.filter((cat) => cat.title === "digital")[0];
 
+// TODO
 const CONTENT = [
   {
     side: "left",
-    msg: "So what does this thing actually do? ",
+    msg: DIGITAL_STYLES.messages.messageOne,
     background: COLOURS.blue,
     color: COLOURS.white,
   },
   {
     side: "right",
-    msg: "We take your chat messages",
+    msg: DIGITAL_STYLES.messages.messageTwo,
     color: COLOURS.red,
     borderColor: COLOURS.red,
   },
   {
     side: "left",
-    msg: "Wow. That’s awesome!",
+    msg: DIGITAL_STYLES.messages.messageThree,
     background: COLOURS.blue,
     color: COLOURS.white,
   },
@@ -283,7 +295,7 @@ const Messages: React.FC<MessagesProps> = (props) => {
       {CONTENT.map((message) => {
         if (message.side === "left") {
           return (
-            <Grid item>
+            <Grid item key={message.msg}>
               <Bubble
                 {...message}
                 background={
@@ -306,7 +318,7 @@ const Messages: React.FC<MessagesProps> = (props) => {
           );
         } else {
           return (
-            <Grid item>
+            <Grid item key={message.msg}>
               <Bubble
                 {...message}
                 background={
@@ -416,76 +428,120 @@ const Purchase: React.FC<PurchaseProps> = (props) => {
 
 const DigitalStyles: React.FC = () => {
   const context = useContext(StylesContext);
-  const [nameTop, setNameTop] = useState<string>("John");
+  const idContext = useContext(IdContext);
+  const formContext = useContext(FirstFormContext);
+  // TODO
+  // const [nameTop, setNameTop] = useState<string>("John");
   const [backgroundTop, setBackgroundTop] = useState<any>();
   const [textTop, setTextTop] = useState<any>();
   const [filledTop, setFilledTop] = useState<boolean>(true);
-
-  const [nameBottom, setNameBottom] = useState<string>("Jane");
+  // TODO
+  // const [nameBottom, setNameBottom] = useState<string>("Jane");
   const [backgroundBottom, setBackgroundBottom] = useState<any>();
   const [textBottom, setTextBottom] = useState<any>();
   const [filledBottom, setFilledBottom] = useState<boolean>(false);
 
-  const [clicked, setClicked] = useState<boolean>(false);
-  const history = useHistory();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
-  const handleClick = (event: MouseEvent) => {
+  const history = useHistory();
+  const { sendRequest } = useHttpClient();
+
+  // TODO
+  const handleClick = async (event: MouseEvent) => {
     event.preventDefault();
-    context.updateStyles({
-      backgroundTop: backgroundTop ? backgroundTop.hex : COLOURS.blue,
-      textTop: textTop ? textTop.hex : COLOURS.white,
-      filledTop: filledTop,
-      backgroundBottom: backgroundBottom ? backgroundBottom.hex : COLOURS.red,
-      textBottom: textBottom ? textBottom.hex : COLOURS.red,
-      filledBottom: filledBottom,
-      dbUpdated: false,
-      styleLoading: false,
-      isStyleValid: false,
-    });
-    setClicked((prev: boolean) => !prev);
-    history.push("/payment");
+
+    try {
+      setLoading((prevState: boolean) => !prevState);
+
+      const formData: FormData = new FormData();
+      formData.append("uuid", idContext.id);
+      formData.append(
+        "backgroundTop",
+        backgroundTop ? backgroundTop.hex : COLOURS.blue,
+      );
+      formData.append("textTop", textTop ? textTop.hex : COLOURS.white);
+      formData.append("filledTop", filledTop.toString());
+      formData.append(
+        "backgroundBottom",
+        backgroundBottom ? backgroundBottom.hex : COLOURS.red,
+      );
+      formData.append("textBottom", textBottom ? textBottom.hex : COLOURS.red);
+      formData.append("filledBottom", filledBottom.toString());
+      formData.append("status", "STAGE-1");
+
+      // TODO
+      const responseData = await sendRequest(
+        `${process.env.REACT_APP_API}/api/users/insightful`,
+        "PATCH",
+        formData,
+      );
+
+      setIsError(responseData.status !== "OK");
+
+      context.updateStyles({
+        backgroundTop: backgroundTop ? backgroundTop.hex : COLOURS.blue,
+        textTop: textTop ? textTop.hex : COLOURS.white,
+        filledTop: filledTop,
+        backgroundBottom: backgroundBottom ? backgroundBottom.hex : COLOURS.red,
+        textBottom: textBottom ? textBottom.hex : COLOURS.red,
+        filledBottom: filledBottom,
+        dbUpdated: false,
+        styleLoading: false,
+        isStyleValid: false,
+      });
+      // setClicked((prev: boolean) => !prev);
+      history.push(HREFS.almost);
+    } catch {
+      setIsError(true);
+    }
   };
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="flex-start"
-      alignItems="center"
-      spacing={10}
-      style={{ marginTop: 20, height: "40rem" }}
-    >
-      <Grid item>
-        <Typography variant="h4" style={{ color: COLOURS.red }}>
-          Make the look your own{" "}
-          <span role="img" aria-label="emoji">
-            💅
-          </span>
-        </Typography>
+    <React.Fragment>
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        alignItems="center"
+        spacing={5}
+        style={{ padding: 20, marginTop: 70 }}
+      >
+        <Grid item style={{ position: "absolute", top: 10 }}>
+          <Breadcrumbs crumbs={DIGITAL_STYLE_CRUMBS} />
+        </Grid>
+        <Grid item>
+          <Typography variant="h4" style={{ color: COLOURS.red }}>
+            {DIGITAL_STYLES.title}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <StyleBlock
+            nameTop={formContext.nameTop}
+            backgroundTop={backgroundTop}
+            setBackgroundTop={setBackgroundTop}
+            textTop={textTop}
+            setTextTop={setTextTop}
+            filledTop={filledTop}
+            setFilledTop={setFilledTop}
+            //
+            nameBottom={formContext.nameBottom}
+            backgroundBottom={backgroundBottom}
+            setBackgroundBottom={setBackgroundBottom}
+            textBottom={textBottom}
+            setTextBottom={setTextBottom}
+            filledBottom={filledBottom}
+            setFilledBottom={setFilledBottom}
+          />
+        </Grid>
+        <Grid item>
+          <Purchase onClick={handleClick} />
+        </Grid>
       </Grid>
-      <Grid item>
-        <StyleBlock
-          nameTop={nameTop}
-          backgroundTop={backgroundTop}
-          setBackgroundTop={setBackgroundTop}
-          textTop={textTop}
-          setTextTop={setTextTop}
-          filledTop={filledTop}
-          setFilledTop={setFilledTop}
-          //
-          nameBottom={nameBottom}
-          backgroundBottom={backgroundBottom}
-          setBackgroundBottom={setBackgroundBottom}
-          textBottom={textBottom}
-          setTextBottom={setTextBottom}
-          filledBottom={filledBottom}
-          setFilledBottom={setFilledBottom}
-        />
-      </Grid>
-      <Grid item>
-        <Purchase onClick={handleClick} />
-      </Grid>
-    </Grid>
+      {/* TODO */}
+      <LoadingSpinner loading={loading && !isError} color={COLOURS.red} />
+      <ErrorModal isError={isError} color={COLOURS.red} />
+    </React.Fragment>
   );
 };
 

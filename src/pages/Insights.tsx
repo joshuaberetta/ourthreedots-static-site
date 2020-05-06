@@ -1,49 +1,56 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 
 import Page from "./Page";
+
+import { INSIGHTS } from "../shared/Content";
 import { COLOURS } from "../shared/Colours";
 
 import Bars from "../components/svg/Bars";
 import Bubbles from "../components/svg/Bubbles";
 
+const useStyles = makeStyles({
+  root: {
+    padding: 20,
+  },
+});
+
 const Product: React.FC = () => {
+  const classes = useStyles();
+
   return (
-    <Page background={COLOURS.white}>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        spacing={10}
-      >
-        <Grid item>
-          <Typography variant="h4">
-            Discover unique trends{" "}
-            <span role="img" aria-label="emoji">
-              🤔
-            </span>
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Grid
-            container
-            direction="row"
-            spacing={10}
-            alignItems="center"
-            justify="center"
-          >
-            <Grid item>
-              <Bars />
-            </Grid>
-            <Grid item>
-              <Bubbles />
+    <React.Fragment>
+      <Page background={COLOURS.white} id="insights">
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+          spacing={10}
+          className={classes.root}
+        >
+          <Grid item>
+            <Typography variant="h4">{INSIGHTS.title}</Typography>
+          </Grid>
+          <Grid item>
+            <Grid
+              container
+              direction="row"
+              spacing={10}
+              alignItems="center"
+              justify="center"
+            >
+              <Grid item>
+                <Bars />
+              </Grid>
+              <Grid item>
+                <Bubbles />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    </Page>
+      </Page>
+    </React.Fragment>
   );
 };
 

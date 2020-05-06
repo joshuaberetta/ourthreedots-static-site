@@ -6,4 +6,5 @@ export const HREFS = {
   book: "/book",
   payment: "/payment",
   success: "/success",
+  almost: "/almost",
 };

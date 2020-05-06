@@ -1,3 +1,10 @@
 body {
   margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  max-width: 100%;
+  overflow-x: hidden;
 }

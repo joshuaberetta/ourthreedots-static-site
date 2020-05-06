@@ -23,7 +23,6 @@ const Form = () => {
   const formSubmitHandler = async (event: any) => {
     event.preventDefault();
     try {
-      console.log();
       const formData: FormData = new FormData();
       formData.append("uuid", "qwerty123456");
       formData.append("email", email);
@@ -33,8 +32,11 @@ const Form = () => {
       formData.append("dateEnd", dateEnd);
 
       const responseData = await fetch(
-        "http://localhost:5000/api/users/insightful",
-        { method: "POST", body: formData },
+        `${process.env.REACT_APP_API}/api/users/insightful`,
+        {
+          method: "POST",
+          body: formData,
+        },
       );
     } catch (err) {}
   };

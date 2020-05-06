@@ -1,106 +1,79 @@
-import React, { useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Grid, makeStyles } from "@material-ui/core";
 
-import { Grid, Typography, Button, TextField, Paper } from "@material-ui/core";
-import { COLOURS } from "../shared/Colours";
-import { LocationContext } from "../shared/context/form-context";
+import {
+  LocationContext,
+  CategoryContext,
+} from "../shared/context/form-context";
 
 import PaymentForm from "./payment/index";
+import Breadcrumbs from "../components/Breadcrumbs";
+import ErrorModal from "../components/Error";
 
-interface CrumbProps {
-  href: string;
-  title: string;
-  disabled: boolean;
-}
+import {
+  INSIGHTFUL_PAYMENT_CRUMBS,
+  DIGITAL_PAYMENT_CRUMBS,
+} from "../shared/Crumbs";
+import { COLOURS } from "../shared/Colours";
 
-const Crumb: React.FC<CrumbProps> = (props) => {
-  const history = useHistory();
-  return (
-    <Button
-      onClick={() => history.push(props.href)}
-      disabled={props.disabled}
-      disableRipple
-    >
-      <Typography variant="h6">{props.title}</Typography>
-    </Button>
-  );
-};
+const useStyles = makeStyles({
+  root: {
+    padding: 20,
+    marginTop: 70,
+    minHeight: "40rem",
+  },
+  crumbs: {
+    position: "absolute",
+    top: 10,
+  },
+});
 
-const Breadcrumbs: React.FC = () => {
-  return (
-    <Grid
-      container
-      direction="row"
-      alignItems="center"
-      justify="center"
-      spacing={10}
-    >
-      <Grid item>
-        <Crumb title="🏠" href="/" disabled={false} />
-      </Grid>
-      <Grid item>
-        <Crumb title="✍️" href="/insightful" disabled={false} />
-      </Grid>
-      <Grid item>
-        <Crumb title="💰" href="/" disabled={false} />
-      </Grid>
-      <Grid item>
-        <Crumb title="🎉" href="/" disabled={true} />
-      </Grid>
-    </Grid>
-  );
-};
-
-interface CustomButtonProps {
-  onClick: (event: any) => void;
-}
-
-const CustomButton: React.FC<CustomButtonProps> = (props) => {
-  return (
-    <Button
-      variant="outlined"
-      style={{ border: `2px solid ${COLOURS.blue}`, width: 300 }}
-      disableRipple
-      onClick={props.onClick}
-    >
-      <Typography variant="h3">
-        <span role="img" aria-label="emoji">
-          🎉 🎉 🎉
-        </span>
-      </Typography>
-    </Button>
-  );
-};
-
-const Payment: React.FC = () => {
+const Payment: React.FC = (props) => {
   const locationContext = useContext(LocationContext);
-  // const history = useHistory();
+  const categoryContext = useContext(CategoryContext);
+  const [isError, setIsError] = useState<boolean>(false);
 
-  // const handleClick = () => {
-  //   locationContext.updateLocation("/payment");
-  //   history.push("/success");
-  // };
+  const classes = useStyles();
+
+  let crumbs;
+  switch (categoryContext.category) {
+    case "insightful":
+      crumbs = INSIGHTFUL_PAYMENT_CRUMBS;
+      break;
+    case "digital":
+      crumbs = DIGITAL_PAYMENT_CRUMBS;
+      break;
+    default:
+      crumbs = undefined;
+  }
+
+  if (!crumbs) {
+    setIsError(true);
+  }
 
   useEffect(() => {
     locationContext.updateLocation("/payment");
-  }, []);
+  });
 
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justify="center"
-      style={{ marginTop: 70, minHeight: "40rem" }}
-      spacing={5}
-    >
-      <Grid item style={{ position: "absolute", top: 10 }}>
-        <Breadcrumbs />
+    <React.Fragment>
+      <ErrorModal color={COLOURS.red} isError={isError} />
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        className={classes.root}
+        spacing={5}
+      >
+        <Grid item className={classes.crumbs}>
+          <Breadcrumbs crumbs={crumbs} />
+        </Grid>
+        <Grid item>
+          <PaymentForm />
+        </Grid>
       </Grid>
-      <Grid item>
-        <PaymentForm />
-      </Grid>
-    </Grid>
+    </React.Fragment>
   );
 };
 

@@ -1,7 +1,18 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
+
+import { INSIGHTS } from "../../shared/Content";
 import { COLOURS } from "../../shared/Colours";
+
+const useStyles = makeStyles({
+  root: {
+    background: (props: BarProps) => props.color,
+    height: (props: BarProps) => props.height,
+    width: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+});
 
 interface BarProps {
   emoji: string;
@@ -11,50 +22,43 @@ interface BarProps {
 
 const BARS: BarProps[] = [
   {
-    emoji: "🤡",
+    emoji: INSIGHTS.emoji[0],
     color: COLOURS.red,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "🎲",
+    emoji: INSIGHTS.emoji[1],
     color: COLOURS.blue,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "🕺",
+    emoji: INSIGHTS.emoji[2],
     color: COLOURS.green,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "🔥",
+    emoji: INSIGHTS.emoji[3],
     color: COLOURS.yellow,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "😀",
+    emoji: INSIGHTS.emoji[4],
     color: COLOURS.red,
     height: 50 + ~~(Math.random() * 150),
   },
   {
-    emoji: "🙌",
+    emoji: INSIGHTS.emoji[5],
     color: COLOURS.blue,
     height: 50 + ~~(Math.random() * 150),
   },
 ];
 
 const Bar: React.FC<BarProps> = (props) => {
+  const classes = useStyles(props);
+
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Grid
-        item
-        style={{
-          background: props.color,
-          height: props.height,
-          width: 10,
-          borderRadius: 5,
-          marginBottom: 10,
-        }}
-      />
+      <Grid item className={classes.root} />
       <Grid item>
         <Typography variant="h6">
           <span role="img" aria-label="emoji">
@@ -76,7 +80,7 @@ const BarPlot = () => {
       spacing={2}
     >
       {BARS.map((bar) => (
-        <Grid item>
+        <Grid item key={`${bar.height}-${bar.emoji}`}>
           <Bar {...bar} />
         </Grid>
       ))}

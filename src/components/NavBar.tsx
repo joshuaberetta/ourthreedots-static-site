@@ -1,113 +1,126 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-// import Link from "@material-ui/core/Link";
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useCallback } from "react";
+import {
+  Grid,
+  Typography,
+  AppBar,
+  Button,
+  makeStyles,
+} from "@material-ui/core";
+// import MenuIcon from "@material-ui/icons/Menu";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import { HashLink as Link } from "react-router-hash-link";
+import Drawer from "./Drawer";
 
 import { NavLinkProps } from "../models/NavLink.model";
 import { LINKS } from "../shared/Links";
 import { COLOURS } from "../shared/Colours";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  bar: {
+    minHeight: "4rem",
+    width: "100%",
+    paddingRight: "4rem",
+    paddingLeft: "4rem",
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: "2rem",
+      paddingLeft: "2rem",
+    },
+  },
   button: {
     position: "relative",
     height: "4rem",
     textTransform: "none",
     width: "100px",
     fontWeight: "bold",
-    "&:hover, &$focusVisible": {
-      "& $imageBackdrop": {
-        opacity: 0.15,
-      },
-    },
   },
   logo: {
     position: "relative",
     height: "4rem",
     textTransform: "none",
-    // background: "white",
-    // width: "500px",
-    "&:hover, &$focusVisible": {
+    "&:hover": {
       background: "white",
+    },
+  },
+  link: {
+    color: "black",
+  },
+  linkContainer: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  drawer: {
+    [theme.breakpoints.up("md")]: {
+      display: "none",
     },
   },
 }));
 
 const NavLink: React.FC<NavLinkProps> = (props) => {
   const classes = useStyles();
-  const history = useHistory();
-
-  const handleRedirect = () => {
-    history.push("/");
-    window.scrollTo(0, 0);
-  };
 
   return (
-    <Button disableRipple className={classes.button} onClick={handleRedirect}>
-      <Typography
-        variant="subtitle1"
-        component="span"
-        style={{ color: "black" }}
-      >
-        {props.title}
-      </Typography>
-    </Button>
+    <Link smooth to={props.href} style={{ textDecoration: "none" }}>
+      <Button disableRipple className={classes.button}>
+        <Typography
+          variant="subtitle1"
+          component="span"
+          className={classes.link}
+        >
+          {props.title}
+        </Typography>
+      </Button>
+    </Link>
   );
 };
 
 const NavBar: React.FC = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const [open, setOpen] = useState<boolean>(false);
 
-  const handleRedirect = () => {
-    history.push("/");
-    window.scrollTo(0, 0);
-  };
+  const toggleDrawer = useCallback(() => {
+    setOpen((prev: boolean) => !prev);
+  }, []);
 
   return (
     <React.Fragment>
-      <AppBar color="inherit">
+      <Drawer open={open} toggleDrawer={toggleDrawer} />
+      <AppBar color="inherit" position="fixed">
         <Grid
           container
           direction="row"
-          style={{
-            minHeight: "4rem",
-            width: "100%",
-            //   boxShadow: "0px 3px 20px 5px #ccc",
-            paddingRight: "4rem",
-            paddingLeft: "4rem",
-          }}
+          className={classes.bar}
           justify="space-between"
           alignItems="center"
         >
           <Grid item>
-            <Button
-              disableRipple
-              className={classes.logo}
-              onClick={handleRedirect}
-            >
-              <Typography variant="h4">
-                <span style={{ color: COLOURS.black }}>our</span>
-                <span style={{ color: COLOURS.blue }}>three</span>
-                <span style={{ color: COLOURS.red }}>dots</span>
-              </Typography>
-            </Button>
+            <Link smooth to="/#home" style={{ textDecoration: "none" }}>
+              <Button disableRipple className={classes.logo}>
+                <Typography variant="h4">
+                  <span style={{ color: COLOURS.black }}>our</span>
+                  <span style={{ color: COLOURS.blue }}>three</span>
+                  <span style={{ color: COLOURS.red }}>dots</span>
+                </Typography>
+              </Button>
+            </Link>
           </Grid>
-          <Grid item>
+          <Grid item className={classes.linkContainer}>
             <Grid container direction="row" spacing={1}>
               {LINKS.map((link) => (
-                <Grid item>
-                  <NavLink title={link.title} href="" />
+                <Grid item key={link.title}>
+                  <NavLink title={link.title} href={link.href} />
                 </Grid>
               ))}
             </Grid>
           </Grid>
+          <Grid item className={classes.drawer} onClick={toggleDrawer}>
+            <Button disableRipple className={classes.button}>
+              {/* <Typography variant="h4">🗄</Typography> */}
+              <MoreHorizIcon fontSize="large" />
+            </Button>
+          </Grid>
         </Grid>
       </AppBar>
-      <div style={{ height: "4rem" }} />
     </React.Fragment>
   );
 };

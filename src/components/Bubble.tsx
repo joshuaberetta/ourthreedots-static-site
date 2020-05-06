@@ -1,28 +1,35 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 
 import { BubbleProps } from "../models/Bubble.model";
 
+const useStyles = makeStyles({
+  container: {
+    width: 300,
+  },
+  item: {
+    background: (props: BubbleProps) => props.background || "none",
+    borderRadius: 10,
+    borderBottomRightRadius: (props: BubbleProps) =>
+      props.side === "right" ? 0 : 10,
+    borderBottomLeftRadius: (props: BubbleProps) =>
+      props.side === "right" ? 10 : 0,
+    padding: 15,
+    border: (props: BubbleProps) => `2px solid ${props.borderColor || "none"}`,
+    maxWidth: 250,
+  },
+});
+
 const Bubble: React.FC<BubbleProps> = (props) => {
+  const classes = useStyles(props);
+
   return (
     <Grid
       container
-      style={{ width: 300 }}
+      className={classes.container}
       justify={props.side === "right" ? "flex-end" : "flex-start"}
     >
-      <Grid
-        item
-        style={{
-          background: props.background || "none",
-          borderRadius: 10,
-          borderBottomRightRadius: props.side === "right" ? 0 : 10,
-          borderBottomLeftRadius: props.side === "right" ? 10 : 0,
-          padding: 15,
-          border: `2px solid ${props.borderColor || "none"}`,
-          maxWidth: 250,
-        }}
-      >
+      <Grid item className={classes.item}>
         <Typography variant="body1" style={{ color: props.color }}>
           {props.msg}
         </Typography>

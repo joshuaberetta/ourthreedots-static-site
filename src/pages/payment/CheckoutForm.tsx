@@ -1,36 +1,33 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-import {
-  Backdrop,
-  CircularProgress,
-  Typography,
-  Grid,
-  Button,
-} from "@material-ui/core";
+import { Typography, Grid, Button, makeStyles } from "@material-ui/core";
 
+import ErrorModal from "../../components/Error";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import CardSection from "./CardSection";
+
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { IdContext, CategoryContext } from "../../shared/context/form-context";
+import { PriceCard } from "../../models/PriceCard.model";
+
+import { CATEGORIES } from "../../shared/PricingCategories";
+import { PAYMENT } from "../../shared/Content";
 import { COLOURS } from "../../shared/Colours";
+import { HREFS } from "../../shared/Hrefs";
 
-interface LoadingSpinnerProps {
-  loading: boolean;
-  color: string;
-}
+const useStyles = makeStyles({
+  buttonCancel: {
+    border: `2px solid ${COLOURS.red}`,
+    width: 150,
+  },
+  buttonProceed: {
+    border: (props: { color: string }) => `2px solid ${props.color}`,
+    width: 150,
+  },
+});
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
-  return (
-    <Backdrop
-      style={{ zIndex: 2, background: "rgba(255,255,255,0.7)" }}
-      open={props.loading}
-    >
-      <CircularProgress style={{ color: props.color }} />
-    </Backdrop>
-  );
-};
-
-export default function CheckoutForm() {
+const CheckoutForm = () => {
   const idContext = useContext(IdContext);
   const categoryContext = useContext(CategoryContext);
   const { sendRequest } = useHttpClient();
@@ -38,15 +35,29 @@ export default function CheckoutForm() {
   const elements = useElements();
   const history = useHistory();
   const [loading, setLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [category, setCategory] = useState<PriceCard>({
+    title: "",
+    description: "",
+    price: "",
+    href: "",
+    background: "",
+    color: "",
+  });
+
+  const classes = useStyles({ color: category.color });
+
+  useEffect(() => {
+    const CAT = CATEGORIES.filter(
+      (cat) => cat.title === categoryContext.category,
+    )[0];
+    setCategory(CAT);
+  }, [categoryContext]);
 
   const handleSubmit = async (event) => {
-    // We don't want to let default form submission happen here,
-    // which would refresh the page.
     event.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
@@ -57,16 +68,16 @@ export default function CheckoutForm() {
       const formData = new FormData();
       formData.append("category", categoryContext.category);
       responseData = await sendRequest(
-        "http://localhost:5000/api/payment",
+        `${process.env.REACT_APP_API}/api/payment`,
         "POST",
         formData,
       );
     } catch {
-      console.log("something went wrong");
+      setIsError(true);
     }
 
     if (!responseData) {
-      console.log("something went wrong");
+      setIsError(true);
       return;
     }
 
@@ -79,23 +90,22 @@ export default function CheckoutForm() {
       },
     });
 
-    // testing out shared state
-    // console.log(context);
-
     if (result.error) {
       // Show error to your customer (e.g., insufficient funds)
-      console.log(result.error.message);
+      // console.log(result.error.message);
+      setIsError(true);
     } else {
       // The payment has been processed!
       if (result.paymentIntent!.status === "succeeded") {
-        history.push("/success");
+        history.push(HREFS.success);
       }
     }
   };
 
   return (
     <React.Fragment>
-      <LoadingSpinner loading={loading} color={COLOURS.blue} />
+      <LoadingSpinner loading={loading && !isError} color={category.color} />
+      <ErrorModal isError={isError} color={category.color} />
       <form onSubmit={handleSubmit}>
         <Grid
           container
@@ -105,11 +115,7 @@ export default function CheckoutForm() {
           justify="center"
         >
           <Grid item>
-            <Typography variant="h3">
-              <span role="img" aria-label="emjoi">
-                💳
-              </span>
-            </Typography>
+            <Typography variant="h3">{PAYMENT.title}</Typography>
           </Grid>
           <Grid item>
             <CardSection />
@@ -118,22 +124,24 @@ export default function CheckoutForm() {
             <Grid container direction="row" spacing={3}>
               <Grid item>
                 <Button
-                  variant="contained"
-                  color="secondary"
+                  className={classes.buttonCancel}
+                  disableRipple
                   onClick={() => history.push("/")}
-                  disabled={!stripe || loading}
+                  disabled={!stripe || !elements || loading}
                 >
-                  Cancel
+                  <Typography variant="h3">{PAYMENT.buttons.cancel}</Typography>
                 </Button>
               </Grid>
               <Grid item>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  className={classes.buttonProceed}
+                  disableRipple
                   type="submit"
-                  disabled={!stripe || loading}
+                  disabled={!stripe || !elements || loading}
                 >
-                  Confirm order
+                  <Typography variant="h3">
+                    {PAYMENT.buttons.proceed}
+                  </Typography>
                 </Button>
               </Grid>
             </Grid>
@@ -142,4 +150,6 @@ export default function CheckoutForm() {
       </form>
     </React.Fragment>
   );
-}
+};
+
+export default CheckoutForm;
